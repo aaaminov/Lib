@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Авторы";
+}
+<div class="">
+    @{
+        foreach (var author in ViewBag.authors) {
+            <h4>
+                <a class="" asp-controller="Author" asp-action="One" asp-route-id="@author.Id" >@author.Name</a>
+            </h4>
+        }
+    }
+</div>

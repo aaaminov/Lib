@@ -1,0 +1,27 @@
+﻿@{
+	ViewData["Title"] = @ViewBag.user.Name /*+ " - Пользователь"*/;
+}
+
+<h2>@ViewBag.user.Name</h2>
+
+@{
+	//foreach (var bookFFB in ViewBag.bookFromFeaturedBooks) {
+	//    <h4>
+	//        @bookFFB.FeaturedBook.Mark.Name
+	//        <br>
+	//        <a asp-controller="Book" asp-action="One" asp-route-id="@bookFFB.Book.Id">@bookFFB.Book.Name</a>
+
+	//        @bookFFB.FeaturedBook.Mark.Name
+	//        <br>
+	//        <a asp-controller="Book" asp-action="One" asp-route-id="@bookFFB.Book.Id">@bookFFB.Book.Name</a>
+	//    </h4>
+	//}
+
+	foreach (var featuredBook in ViewBag.featuredBooks) {
+		<h4>
+			<div>@featuredBook.Mark.Name</div>
+			<a asp-controller="Book" asp-action="One" asp-route-id="@featuredBook.Book.Id">@featuredBook.Book.Name</a>
+
+		</h4>
+	}
+}

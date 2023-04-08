@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Авторизация";
+}
+<h1>@ViewData["Title"]</h1>
+@{
+	if (@ViewBag.message != null) {
+		<h3>@ViewBag.message</h3>
+	}
+}
+
+<form asp-controller="Auth" asp-action="Login" method="post">
+	<div class="form_group mt-2 mb-2">
+		@*<label for="login">Логин:</label>*@
+		<input class="form-control" id="login" name="login" type="email" required placeholder="Логин" />
+	</div>
+
+	<div class="form_group mt-2 mb-2">
+		@*<label for="password">Пароль:</label>*@
+		<input class="form-control" id="password" name="password" type="password" required placeholder="Пароль" />
+	</div>
+
+	<input class="btn btn-success mt-2 mb-2" type="submit" value="Войти" />
+
+</form>

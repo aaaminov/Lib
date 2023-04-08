@@ -1,0 +1,54 @@
+﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light    border-bottom box-shadow mb-3" @*bg-white*@>
+	<div class="container">
+		<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Lib</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+				aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+			<ul class="navbar-nav flex-grow-1 mt-2">
+				<li class="nav-item">
+					<form asp-controller="Home" asp-action="Search" method="get">
+						<input class="form-control" type="search" name="search" placeholder="Поиск" />
+						@*<div class="input-group">
+						<input class="form-control" type="search" name="search" placeholder="Поиск" />
+						<div class="input-group-append">
+						<button class="btn btn-outline-secondary" type="submit">
+						<span class="bi bi-search"></span>
+						</button>
+						</div>
+						</div>*@
+					</form>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link  " asp-area="" asp-controller="Home" asp-action="Popular">Популярное</a> @*text-dark*@
+				</li>
+				<li class="nav-item">
+					<a class="nav-link  " asp-area="" asp-controller="Home" asp-action="New">Новинки</a> @*text-dark*@
+				</li>
+				<li class="nav-item nav-link">-</li>
+				@{
+					int? userIdd = Context.Session.GetInt32("userId");
+					if (userIdd.HasValue) {
+						<li class="nav-item">
+							<a class="nav-link" asp-area="" asp-controller="Note" asp-action="All">Заметки</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-area="" asp-controller="FeaturedBook" asp-action="All">Избранное</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-area="" asp-controller="User" asp-action="Profile">Профиль</a>
+						</li>
+					} else {
+						<li class="nav-item">
+							<a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Войти</a>
+						</li>
+						<li class="nav-item">
+							<a class="btn btn-primary" asp-area="" asp-controller="Auth" asp-action="Register">Регистрация</a>
+						</li>
+					}
+				}
+			</ul>
+		</div>
+	</div>
+</nav>

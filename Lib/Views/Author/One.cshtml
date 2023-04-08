@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = @ViewBag.author.Name /*+ " - Автор"*/;
+}
+
+<h2>@ViewBag.author.Name</h2>
+
+@{
+    foreach (var book in ViewBag.books) {
+        <h4>
+            <a asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
+        </h4>
+    }
+}

@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Жанры";
+}
+<div class="">
+    @{
+        foreach (var genre in ViewBag.genres) {
+            <h4>
+                <a class="" asp-controller="Genre" asp-action="One" asp-route-id="@genre.Id" >@genre.Name</a>
+            </h4>
+        }
+    }
+</div>

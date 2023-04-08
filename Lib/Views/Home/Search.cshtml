@@ -1,0 +1,35 @@
+﻿@{
+	ViewData["Title"] = "Поиск - " + @ViewBag.search;
+}
+@*<form class="form-inline" asp-controller="Home" asp-action="Search" method="get">
+	<input class="form-control" type="search" name="search" placeholder="Поиск" />
+</form>*@
+<form class="form-inline" asp-controller="Home" asp-action="Search" method="get">
+	<input class="form-control" type="search" name="search" placeholder="Введите запрос..." value="@ViewBag.search" />
+
+	<select class="form-select mt-2" name="genre_id">
+		<option value="0">Все</option>
+		@{
+			foreach (var genre in ViewBag.genres) {
+				if (genre.Id == ViewBag.genre_id) {
+					<option value="@genre.Id" selected>@genre.Name</option>
+				} else {
+					<option value="@genre.Id">@genre.Name</option>
+				}
+			}
+		}
+	</select>
+
+	<input class="btn btn-success mt-2" type="submit" value="Поиск" />
+
+</form>
+<div class="mt-2">
+	<h2>Результаты:</h2>
+	@{
+		foreach (var book in ViewBag.books) {
+			<h4>
+				<a class="" asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
+			</h4>
+		}
+	}
+</div>

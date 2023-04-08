@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="text-center">
+    <h1 class="display-4">HELLO</h1>
+
+</div>
+<ul class="mt-4">
+	<h2>Тестовое:</h2>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="Author" asp-action="All">Авторы</a> @*text-dark*@
+	</li>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="Genre" asp-action="All">Жанры</a> @*text-dark*@
+	</li>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="Book" asp-action="All">Книги</a> @*text-dark*@
+	</li>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="User" asp-action="All">Пользователи</a> @*text-dark*@
+	</li>
+</ul>

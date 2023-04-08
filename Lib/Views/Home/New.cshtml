@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Новинки";
+}
+<div class="">
+    @{
+        foreach (var book in ViewBag.books) {
+            <h4>
+                <a class="" asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
+            </h4>
+        }
+    }
+</div>

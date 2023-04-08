@@ -1,0 +1,20 @@
+﻿@{
+	ViewData["Title"] = "Заметки";
+}
+<div class="">
+	<form asp-controller="Note" asp-action="Create" method="post">
+		<input class="btn btn-primary" type="submit" value="Создать">
+	</form>
+	<div class="mt-2">
+		@{
+			foreach (var note in ViewBag.notes) {
+				<div class="mt-2">
+					<h4>
+						<a class="" asp-controller="Note" asp-action="One" asp-route-id="@note.Id">@note.Name</a>
+					</h4>
+					<span>@note.StrDateOfCreation</span>
+				</div>
+			}
+		}
+	</div>
+</div>

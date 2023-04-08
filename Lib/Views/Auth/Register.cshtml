@@ -1,0 +1,35 @@
+﻿@{
+	ViewData["Title"] = "Регистрация";
+}
+<h1>@ViewData["Title"]</h1>
+@{
+	if (@ViewBag.message != null){
+		<h3>@ViewBag.message</h3>
+	}
+}
+
+<form asp-controller="Auth" asp-action="Register" method="post">
+	<div class="form_group mt-2 mb-2">
+		@*<label for="login">Логин:</label>*@
+		<input class="form-control" id="login" name="login" type="email" required placeholder="Логин" />
+	</div>
+
+	<div class="form_group mt-2 mb-2">
+		@*<label for="password1">Пароль:</label>*@
+		<input class="form-control" id="password1" name="password1" type="password" required placeholder="Пароль" />
+	</div>
+
+	<div class="form_group mt-2 mb-2">
+		@*<label for="password2">Подтверить пароль:</label>*@
+		<input class="form-control" id="password2" name="password2" type="password" required placeholder="Подтверить пароль" />
+	</div>
+
+	<div class="form_group mt-2 mb-2">
+		@*<label for="name">Имя:</label>*@
+		<input class="form-control" id="name" name="name" type="text" required placeholder="Имя" />
+	</div>
+
+	<input class="btn btn-success mt-2 mb-2" type="submit" value="Зарегистрироваться" />
+
+</form>
+
