@@ -1,0 +1,15 @@
+﻿@{
+	ViewData["Title"] = "Избранное";
+}
+
+<h2>Избранное</h2>
+
+@{
+	foreach (var featuredBook in ViewBag.featuredBooks) {
+		<h4>
+			<div>@featuredBook.Mark.Name</div>
+			<a asp-controller="Book" asp-action="One" asp-route-id="@featuredBook.Book.Id">@featuredBook.Book.Name</a>
+
+		</h4>
+	}
+}

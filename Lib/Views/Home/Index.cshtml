@@ -3,9 +3,32 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">HELLO</h1>
+    <h1 class="display-4">Добро пожаловать на Lib</h1>
 
 </div>
+
+<div class="">
+	<h2>Популярное:</h2>
+	@{
+		foreach (var book in ViewBag.popularBooks) {
+			<h4>
+				<a class="" asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
+			</h4>
+		}
+	}
+</div>
+
+<div class="">
+	<h2>Новинки:</h2>
+	@{
+		foreach (var book in ViewBag.newBooks) {
+			<h4>
+				<a class="" asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
+			</h4>
+		}
+	}
+</div>
+
 <ul class="mt-4">
 	<h2>Тестовое:</h2>
 	<li class="nav-item">

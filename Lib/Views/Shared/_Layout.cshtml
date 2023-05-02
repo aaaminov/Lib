@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="light">
 @*data-bs-theme="dark"*@
 <head>
 	<meta charset="utf-8" />
@@ -48,7 +48,7 @@
 									<a class="nav-link" asp-area="" asp-controller="Note" asp-action="All">Заметки</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" asp-area="" asp-controller="FeaturedBook" asp-action="All">Избранное</a>
+									<a class="nav-link" asp-area="" asp-controller="Featured" asp-action="All">Избранное</a>
 								</li>
 							}
 						}
@@ -57,14 +57,14 @@
 						@{
 							if (userId.HasValue) {
 								<li class="nav-item">
-									<a class="btn btn-primary" asp-area="" asp-controller="User" asp-action="Profile">Профиль</a>
+									<a class="btn btn-outline-primary" asp-area="" asp-controller="User" asp-action="Profile">Профиль</a>
 								</li>
 							} else {
 								<li class="nav-item">
 									<a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Войти</a>
 								</li>
 								<li class="nav-item">
-									<a class="btn btn-outline-primary" asp-area="" asp-controller="Auth" asp-action="Register">Регистрация</a>
+									<a class="btn btn-success" asp-area="" asp-controller="Auth" asp-action="Register">Регистрация</a>
 								</li>
 							}
 						}

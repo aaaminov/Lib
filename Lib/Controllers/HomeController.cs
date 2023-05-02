@@ -13,7 +13,11 @@ namespace Lib.Controllers {
 
         [HttpGet("")]
         public IActionResult Index() {
-            return View();
+			ViewBag.popularBooks = LibDbContext.Instance.Books
+				.Include(b => b.FeaturedBooks)
+				.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
+			ViewBag.newBooks = LibDbContext.Instance.Books.OrderByDescending(b => b.Id).ToList();
+			return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

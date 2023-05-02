@@ -139,6 +139,22 @@ namespace Lib.Controllers {
 			}
 			return RedirectToAction("Login", "Auth");
 		}
+		
+		// GET:
+		[HttpGet("~/featured")]
+		public IActionResult Featured() {
+			User user = getCurrentUser();
+			if (user != null) {
+				List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
+					.Include(fb => fb.Mark)
+					.Include(fb => fb.Book)
+					.Where(fb => fb.UserId == user.Id).ToList();
+				ViewBag.user = user;
+				ViewBag.featuredBooks = featuredBooks;
+				return View();
+			}
+			return RedirectToAction("Login", "Auth");
+		}
 
 
 
