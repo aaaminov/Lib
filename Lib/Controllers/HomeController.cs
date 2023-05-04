@@ -14,9 +14,16 @@ namespace Lib.Controllers {
         [HttpGet("")]
         public IActionResult Index() {
 			ViewBag.popularBooks = LibDbContext.Instance.Books
-				.Include(b => b.FeaturedBooks)
-				.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
-			ViewBag.newBooks = LibDbContext.Instance.Books.OrderByDescending(b => b.Id).ToList();
+                .Include(b => b.AuthorBooks)
+                    .ThenInclude(ab => ab.Author)
+                .Include(b => b.FeaturedBooks)
+				.OrderByDescending(b => b.FeaturedBooks.Count)
+				.Take(4).ToList();
+			ViewBag.newBooks = LibDbContext.Instance.Books
+				.Include(b => b.AuthorBooks)
+					.ThenInclude(ab => ab.Author)
+                .OrderByDescending(b => b.Id)
+				.Take(4).ToList();
 			return View();
         }
 
@@ -33,8 +40,10 @@ namespace Lib.Controllers {
         [HttpGet("popular")]
         public IActionResult Popular() {
 			ViewBag.books = LibDbContext.Instance.Books
+				//.Include(b => b.AuthorBooks)
+				//	.ThenInclude(ab => ab.Author)
                 .Include(b => b.FeaturedBooks)
-                .OrderByDescending(b => b.FeaturedBooks.Count).ToList();
+				.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
 			return View(); // мб потом ссылать такие запросы на одну изменяемую страницу
         }
 

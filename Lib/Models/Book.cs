@@ -25,13 +25,35 @@ namespace Lib.Models
         public virtual ICollection<GenreBook> GenreBooks { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
 
-		public string StrAvgRating {
+        public string StrAvgRating {
 			get {
                 if (AvgRating.HasValue) {
                     return AvgRating.Value.ToString("f");
 				}
-                return null;
+                return "нет оценок";
 			}
 		}
-	}
+
+        public string PhotoPath {
+            get {
+                if (String.IsNullOrEmpty(Photo)) {
+                    return string.Empty;
+                }
+                return Photo;
+            }
+        }
+
+        //public List<Author> GetAuthors {
+        //    get {
+        //        return AuthorBooks.Select(ab => ab.Author).ToList();
+        //    }
+        //}
+
+        //public string StrAuthors {
+        //    get {
+        //        return string.Join(",", GetAuthors);
+
+        //    }
+        //}
+    }
 }

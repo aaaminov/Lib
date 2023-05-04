@@ -2,12 +2,46 @@
     ViewData["Title"] = @ViewBag.author.Name /*+ " - Автор"*/;
 }
 
-<h2>@ViewBag.author.Name</h2>
+<div class="row mb-5">
+	<div class="col-xs-12 col-sm-4 col-md-3">
+		<img class="rounded" style="width: 100%" alt="@ViewBag.author.Name" src="@ViewBag.author.Photo" />
 
-@{
-    foreach (var book in ViewBag.books) {
-        <h4>
-            <a asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
-        </h4>
+	</div>
+
+	<div class="col-xs-12 col-sm-8 col-md-9">
+		<h2>@ViewBag.author.Name</h2>
+
+		<p>@ViewBag.author.Biography</p>
+	</div>
+</div>
+
+<h2>Новинки:</h2>
+<div class="">
+	@{
+		<ul class="list-unstyled row">
+			@{
+				foreach (var book in ViewBag.newBooks) {
+					<li class="d-inline " style="width: auto;">
+						<partial name="Partial/_BookItem" model="book"></partial>
+					</li>
+				}
+			}
+		</ul>
+	}
+</div>
+
+<h2>Популярное:</h2>
+<div class="">
+    @{
+		<ul class="list-unstyled row">
+			@{
+				foreach (var book in ViewBag.popularBooks) {
+					<li class="d-inline " style="width: auto;">
+						<partial name="Partial/_BookItem" model="book"></partial>
+					</li>
+				}
+			}
+		</ul>
     }
-}
+</div>
+

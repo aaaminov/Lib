@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace Lib.Models
 {
-    public partial class Note {
+    public partial class Note
+    {
         public int Id { get; set; }
         public int UserId { get; set; }
         public DateTime DateOfCreation { get; set; }

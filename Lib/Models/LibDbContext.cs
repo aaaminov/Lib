@@ -21,6 +21,7 @@ namespace Lib.Models {
         public virtual DbSet<FeaturedBook> FeaturedBooks { get; set; } = null!;
         public virtual DbSet<Genre> Genres { get; set; } = null!;
         public virtual DbSet<GenreBook> GenreBooks { get; set; } = null!;
+        public virtual DbSet<Like> Likes { get; set; } = null!;
         public virtual DbSet<Mark> Marks { get; set; } = null!;
         public virtual DbSet<Note> Notes { get; set; } = null!;
         public virtual DbSet<Review> Reviews { get; set; } = null!;
@@ -41,9 +42,7 @@ namespace Lib.Models {
             modelBuilder.Entity<Author>(entity => {
                 entity.ToTable("author");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Biography)
                     .HasMaxLength(4096)
@@ -65,9 +64,7 @@ namespace Lib.Models {
 
                 entity.HasIndex(e => e.BookId, "FK_ab_book_idx");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AuthorId).HasColumnName("author_id");
 
@@ -89,9 +86,7 @@ namespace Lib.Models {
             modelBuilder.Entity<Book>(entity => {
                 entity.ToTable("book");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AvgRating).HasColumnName("avg_rating");
 
@@ -121,9 +116,7 @@ namespace Lib.Models {
 
                 entity.HasIndex(e => e.UserId, "FK_fb_user_idx");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.BookId).HasColumnName("book_id");
 
@@ -157,9 +150,7 @@ namespace Lib.Models {
             modelBuilder.Entity<Genre>(entity => {
                 entity.ToTable("genre");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(256)
@@ -173,9 +164,7 @@ namespace Lib.Models {
 
                 entity.HasIndex(e => e.GenreId, "FK_gb_genre_idx");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.BookId).HasColumnName("book_id");
 
@@ -194,12 +183,40 @@ namespace Lib.Models {
                     .HasConstraintName("FK_gb_genre");
             });
 
+            modelBuilder.Entity<Like>(entity => {
+                entity.ToTable("like");
+
+                entity.HasIndex(e => e.ReviewId, "FK_like_review_idx");
+
+                entity.HasIndex(e => e.UserId, "FK_like_user_idx");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasColumnName("date");
+
+                entity.Property(e => e.ReviewId).HasColumnName("review_id");
+
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+
+                entity.HasOne(d => d.Review)
+                    .WithMany(p => p.Likes)
+                    .HasForeignKey(d => d.ReviewId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_like_review");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Likes)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_like_user");
+            });
+
             modelBuilder.Entity<Mark>(entity => {
                 entity.ToTable("mark");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(128)
@@ -211,9 +228,7 @@ namespace Lib.Models {
 
                 entity.HasIndex(e => e.UserId, "FK_note_user_idx");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Content)
                     .HasMaxLength(4096)
@@ -223,11 +238,11 @@ namespace Lib.Models {
                     .HasColumnType("datetime")
                     .HasColumnName("date_of_creation");
 
-				entity.Property(e => e.Name)
-					.HasMaxLength(256)
-					.HasColumnName("name");
+                entity.Property(e => e.Name)
+                    .HasMaxLength(256)
+                    .HasColumnName("name");
 
-				entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Notes)
@@ -243,14 +258,12 @@ namespace Lib.Models {
 
                 entity.HasIndex(e => e.UserId, "FK_review_user_idx");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.BookId).HasColumnName("book_id");
 
                 entity.Property(e => e.Content)
-                    .HasMaxLength(2048)
+                    .HasMaxLength(4096)
                     .HasColumnName("content");
 
                 entity.Property(e => e.DateOfCreation)
@@ -277,9 +290,7 @@ namespace Lib.Models {
             modelBuilder.Entity<RoleUser>(entity => {
                 entity.ToTable("role_user");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(128)
@@ -291,9 +302,7 @@ namespace Lib.Models {
 
                 entity.HasIndex(e => e.RoleId, "FK_user_role_idx");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DateOfRegistration)
                     .HasColumnType("datetime")

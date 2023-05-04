@@ -5,6 +5,11 @@ namespace Lib.Models
 {
     public partial class Review
     {
+        public Review()
+        {
+            Likes = new HashSet<Like>();
+        }
+
         public int Id { get; set; }
         public int UserId { get; set; }
         public int BookId { get; set; }
@@ -14,11 +19,12 @@ namespace Lib.Models
 
         public virtual Book Book { get; set; } = null!;
         public virtual User User { get; set; } = null!;
+        public virtual ICollection<Like> Likes { get; set; }
 
-		public string StrDateOfCreation {
-			get {
-				return DateOfCreation.ToString("G");
-			}
-		}
-	}
+        public string StrDateOfCreation {
+            get {
+                return DateOfCreation.ToString("G");
+            }
+        }
+    }
 }

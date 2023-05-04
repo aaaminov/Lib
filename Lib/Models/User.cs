@@ -8,6 +8,7 @@ namespace Lib.Models
         public User()
         {
             FeaturedBooks = new HashSet<FeaturedBook>();
+            Likes = new HashSet<Like>();
             Notes = new HashSet<Note>();
             Reviews = new HashSet<Review>();
         }
@@ -21,6 +22,7 @@ namespace Lib.Models
 
         public virtual RoleUser Role { get; set; } = null!;
         public virtual ICollection<FeaturedBook> FeaturedBooks { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
     }

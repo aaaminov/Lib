@@ -2,31 +2,40 @@
     ViewData["Title"] = "Главная";
 }
 
-<div class="text-center">
+<div class="mb-5">
+	<img class="img-fluid" src="~/img/home_banner.png" />
+</div>
+
+@*<div class="text-center">
     <h1 class="display-4">Добро пожаловать на Lib</h1>
 
+</div>*@
+
+<h2>Популярное:</h2>
+@*horizontal-scrollable*@
+<div class="">
+	<ul class="list-unstyled row">
+		@{
+			foreach (var book in ViewBag.popularBooks) {
+				<li class="d-inline " style="width: auto;">
+					<partial name="Partial/_BookItem" model="book"></partial>
+				</li>
+			}
+		}
+	</ul>
 </div>
 
+<h2>Новинки:</h2>
 <div class="">
-	<h2>Популярное:</h2>
-	@{
-		foreach (var book in ViewBag.popularBooks) {
-			<h4>
-				<a class="" asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
-			</h4>
+	<ul class="list-unstyled row">
+		@{
+			foreach (var book in ViewBag.newBooks) {
+				<li class="d-inline " style="width: auto;">
+					<partial name="Partial/_BookItem" model="book"></partial>
+				</li>
+			}
 		}
-	}
-</div>
-
-<div class="">
-	<h2>Новинки:</h2>
-	@{
-		foreach (var book in ViewBag.newBooks) {
-			<h4>
-				<a class="" asp-controller="Book" asp-action="One" asp-route-id="@book.Id">@book.Name</a>
-			</h4>
-		}
-	}
+	</ul>
 </div>
 
 <ul class="mt-4">

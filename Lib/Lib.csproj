@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\img\svg\hand-thumbs-up-fill.svg" />
+    <Content Remove="wwwroot\img\svg\hand-thumbs-up.svg" />
+    <Content Remove="wwwroot\img\svg\star-fill.svg" />
+    <Content Remove="wwwroot\img\svg\star.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="wwwroot\img\book_logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wwwroot\img\home_banner.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
@@ -14,6 +29,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wwwroot\img\book_logo.png" />
+    <Resource Include="wwwroot\img\svg\hand-thumbs-up-fill.svg" />
+    <Resource Include="wwwroot\img\svg\hand-thumbs-up.svg" />
+    <Resource Include="wwwroot\img\svg\star-fill.svg" />
+    <Resource Include="wwwroot\img\svg\star.svg" />
   </ItemGroup>
 
 </Project>

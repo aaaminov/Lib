@@ -1,6 +1,7 @@
 ﻿using Lib.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lib.Controllers {
     [Route("author")]
@@ -58,10 +59,19 @@ namespace Lib.Controllers {
             List<Book> books = new List<Book>();
             List<AuthorBook> authorBooks = LibDbContext.Instance.AuthorBooks.Where(ab => ab.AuthorId == id).ToList();
             foreach (AuthorBook authorBook in authorBooks) {
-                books.Add(LibDbContext.Instance.Books.FirstOrDefault(b => b.Id == authorBook.BookId));
+                books.Add(LibDbContext.Instance.Books
+				    .Include(b => b.AuthorBooks)
+					    .ThenInclude(ab => ab.Author)
+				    .Include(b => b.FeaturedBooks)
+					.FirstOrDefault(b => b.Id == authorBook.BookId));
             }
-            ViewBag.books = books;
-            return View();
+			ViewBag.newBooks = books
+                .OrderByDescending(b => b.Id)
+				.Take(4).ToList();
+			ViewBag.popularBooks = books
+				.OrderByDescending(b => b.FeaturedBooks.Count)
+				.Take(4).ToList();
+			return View();
         }
 
         //// GET: AuthorController/Delete/5

@@ -57,39 +57,58 @@ namespace Lib.Controllers {
             Book book = LibDbContext.Instance.Books
                 .Include(b => b.AuthorBooks)
                     .ThenInclude(ab => ab.Author)
+                .Include(b => b.GenreBooks)
+                    .ThenInclude(ab => ab.Genre)
+                .Include(b => b.FeaturedBooks)
+                    .ThenInclude(ab => ab.Mark)
                 .Include(b => b.Reviews)
-					.ThenInclude(ab => ab.User)
-				.FirstOrDefault(b => b.Id == id);
+                    .ThenInclude(ab => ab.User)
+                .Include(b => b.Reviews)
+                    .ThenInclude(ab => ab.Likes)
+                        .ThenInclude(ab => ab.User) // мб не тут потом это делать, а при наведении на лайки
+                .FirstOrDefault(b => b.Id == id);
 
-            //List<Author> authors = new List<Author>();
-            //List<AuthorBook> authorBooks = LibDbContext.Instance.AuthorBooks
-            //    .Include(ab => ab.Author)
-            //    .Where(ab => ab.BookId == id).ToList();
-            //foreach (AuthorBook authorBook in authorBooks) {
-            //    //authors.Add(LibDbContext.Instance.Authors.FirstOrDefault(a => a.Id == authorBook.AuthorId));
-            //    authors.Add(authorBook.Author);
-            //}
+			//List<Author> authors = new List<Author>();
+			//List<AuthorBook> authorBooks = LibDbContext.Instance.AuthorBooks
+			//    .Include(ab => ab.Author)
+			//    .Where(ab => ab.BookId == id).ToList();
+			//foreach (AuthorBook authorBook in authorBooks) {
+			//    //authors.Add(LibDbContext.Instance.Authors.FirstOrDefault(a => a.Id == authorBook.AuthorId));
+			//    authors.Add(authorBook.Author);
+			//}
 
-            ViewBag.book = book;
+			int? userId = HttpContext.Session.GetInt32("userId");
+			if (userId.HasValue) {
+				User user = LibDbContext.Instance.Users
+					.Include(u => u.Role)
+					.Include(u => u.Likes)
+					.FirstOrDefault(u => u.Id == userId);
+				ViewBag.user = user;
+			}
+
+			ViewBag.book = book;
             ViewBag.authors = book.AuthorBooks.Select(ab => ab.Author).ToList();
+            ViewBag.genres = book.GenreBooks.Select(ab => ab.Genre).ToList();
             ViewBag.reviews = book.Reviews.ToList();
             return View();
         }
 
-        //// GET: BookController/Delete/5
-        //public ActionResult Delete(int id) {
-        //    return View();
-        //}
+		//// GET: BookController/Delete/5
+		//public ActionResult Delete(int id) {
+		//    return View();
+		//}
 
-        //// POST: BookController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection) {
-        //    try {
-        //        return RedirectToAction(nameof(Index));
-        //    } catch {
-        //        return View();
-        //    }
-        //}
-    }
+		//// POST: BookController/Delete/5
+		//[HttpPost]
+		//[ValidateAntiForgeryToken]
+		//public ActionResult Delete(int id, IFormCollection collection) {
+		//    try {
+		//        return RedirectToAction(nameof(Index));
+		//    } catch {
+		//        return View();
+		//    }
+		//}
+
+
+	}
 }
