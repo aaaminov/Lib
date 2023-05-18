@@ -12,9 +12,8 @@
 </div>*@
 
 <h2>Популярное:</h2>
-@*horizontal-scrollable*@
-<div class="">
-	<ul class="list-unstyled row">
+<div class="overflow-x-scroll mt-3 mb-5">
+	<ul class="list-unstyled row flex-nowrap mb-0">
 		@{
 			foreach (var book in ViewBag.popularBooks) {
 				<li class="d-inline " style="width: auto;">
@@ -26,8 +25,8 @@
 </div>
 
 <h2>Новинки:</h2>
-<div class="">
-	<ul class="list-unstyled row">
+<div class="overflow-x-scroll mt-3 mb-5">
+	<ul class="list-unstyled row flex-nowrap mb-0">
 		@{
 			foreach (var book in ViewBag.newBooks) {
 				<li class="d-inline " style="width: auto;">

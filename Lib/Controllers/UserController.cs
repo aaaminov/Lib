@@ -66,6 +66,9 @@ namespace Lib.Controllers {
 		// GET: мб убрать
 		[HttpGet("{id:int}")]
 		public IActionResult One(int id) {
+			if (getCurrentUser().Id == id) {
+				return RedirectToAction("Profile");
+			}
 			ViewBag.user = LibDbContext.Instance.Users.Find(id);
 			List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
 				.Include(fb => fb.Mark)

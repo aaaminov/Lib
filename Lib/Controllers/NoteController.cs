@@ -31,8 +31,9 @@ namespace Lib.Controllers {
 		public async Task<ActionResult> Create(IFormCollection collection) {
 			int? userId = HttpContext.Session.GetInt32("userId");
 			if (userId.HasValue) {
+				var last = LibDbContext.Instance.Notes.OrderBy(n => n.Id).LastOrDefault();
 				Note note = new Note {
-					Id = LibDbContext.Instance.Notes.OrderBy(n => n.Id).Last().Id + 1,
+					Id = last != null ? (last.Id + 1) : 0,
 					UserId = userId.Value,
 					DateOfCreation = DateTime.Now,
 					Name = "Без названия"

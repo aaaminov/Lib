@@ -90,6 +90,8 @@ namespace Lib.Controllers {
             ViewBag.authors = book.AuthorBooks.Select(ab => ab.Author).ToList();
             ViewBag.genres = book.GenreBooks.Select(ab => ab.Genre).ToList();
             ViewBag.reviews = book.Reviews.ToList();
+
+            ViewBag.marks = LibDbContext.Instance.Marks.ToList();
             return View();
         }
 

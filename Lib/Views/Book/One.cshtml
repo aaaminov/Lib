@@ -39,7 +39,7 @@
 			</h5>
 		</div>
 		<div class="my-3">
-			<button href="#" class="btn btn-outline-warning"type="button" data-bs-toggle="collapse"
+			<button href="#" class="btn btn-outline-warning" type="button" data-bs-toggle="collapse"
 					data-bs-target="#collapseRating" aria-expanded="false" aria-controls="collapseRating">
 				<h5 class="mb-0">
 					<img class="align-baseline" src="~/img/svg/star-fill.svg" />
@@ -58,6 +58,7 @@
 							if (ratings.Count != 0) {
 								percent = ((double)iRatings.Count / ratings.Count) * 100;
 							}
+							percent = Math.Round(percent, 2);
 
 							<div class="row my-1">
 								<div class="col-2 d-flex">
@@ -87,10 +88,10 @@
 							</div>
 						}
 					}
-					
+
 				</div>
 			</div>
-			
+
 		</div>
 
 		<div class="my-2">
@@ -119,19 +120,36 @@
 						<div class="modal-dialog modal-dialog-centered" role="document">
 							<div class="modal-content">
 								@{
-									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										...
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-										<button type="button" class="btn btn-primary">Сохранить</button>
-									</div>
+									<form class="form-inline" asp-controller="Featured" asp-action="One" method="post">
+										<div class="modal-header">
+											<h5 class="modal-title">Избранное</h5>
+										</div>
+
+										<div class="modal-body">
+											<input type="hidden" name="book_id" value="@book.Id" />
+											<div class="form-group">
+												<label for="selectMark">Метка</label>
+												<select id="selectMark" class="form-select mt-2" name="mark_id">
+													@{
+														<option value="0">-</option>
+														foreach (var mark in ViewBag.marks) {
+															if (featuredBook != null && featuredBook.MarkId == mark.Id) {
+																<option value="@mark.Id" selected>@mark.Name</option>
+															} else {
+																<option value="@mark.Id">@mark.Name</option>
+															}
+														}
+													}
+												</select>
+											</div>
+
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+											<input class="btn btn-primary" type="submit" value="Сохранить" />
+										</div>
+									</form>
+
 								}
 							</div>
 						</div>
@@ -156,18 +174,53 @@
 							<div class="modal-content">
 								@{
 									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
+										<h5 class="modal-title">Рецензия</h5>
+										@{
+											if (review != null) {
+												<form class="form-inline" asp-controller="Review" asp-action="Delete" method="post">
+													<input type="hidden" name="book_id" value="@book.Id" />
+													<input class="btn btn-danger" type="submit" value="Удалить" />
+												</form>
+											}
+										}
 									</div>
-									<div class="modal-body">
-										...123
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-										<button type="button" class="btn btn-primary">Сохранить</button>
-									</div>
+									<form class="form-inline" asp-controller="Review" asp-action="Update" method="post">
+
+										<div class="modal-body">
+											<input type="hidden" name="book_id" value="@book.Id" />
+											<div class="form-group">
+												<label for="selectRating">Оценка</label>
+												<select id="selectRating" class="form-select mt-2" name="rating">
+													@{
+														for (int i = 1; i < 6; i++) {
+															if (review != null && review.Rating == i) {
+																<option value="@i" selected>@i</option>
+															} else {
+																<option value="@i">@i</option>
+															}
+														}
+													}
+												</select>
+											</div>
+
+											<div class="form-group mt-2">
+												<label for="textareaContent">Текст</label>
+												<textarea class="form-control mt-2" id="textareaContent"
+														  rows="5" name="content" required>
+													@{
+														if (review != null) {
+															@review.Content
+														}
+													}
+																											</textarea>
+											</div>
+
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+											<input class="btn btn-primary" type="submit" value="Сохранить" />
+										</div>
+									</form>
 								}
 							</div>
 						</div>
@@ -190,9 +243,74 @@
 		<div class="my-2">
 			@{
 				var featuredBooks = @book.FeaturedBooks.ToList();
+
+				var read = featuredBooks.Where(fb => fb.MarkId == 3);
+				var readLater = featuredBooks.Where(fb => fb.MarkId == 1);
 			}
-			<a class="nav-link d-inline">Прочитали - @featuredBooks.Where(fb => fb.MarkId == 3).Count()</a>
-			<a class="nav-link d-inline mx-3">Планируют - @featuredBooks.Where(fb => fb.MarkId == 1).Count()</a>
+			<a class=" d-inline" data-bs-toggle="modal"
+			   data-bs-target="#modalForUsersWhoRead">
+				Прочитали - @read.Count()
+			</a>
+			<!-- Modal -->
+			<div class="modal fade" id="modalForUsersWhoRead" tabindex="-1" role="dialog"
+				 aria-labelledby="modalForReviewForBookTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Прочитали</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								@{
+									foreach (var user in read.Select(fb => fb.User)) {
+										<h4>
+											<a class="" asp-controller="User" asp-action="One"
+									   asp-route-id="@user.Id">@user.Name</a>
+										</h4>
+									}
+								}
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Ок</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<a class=" d-inline mx-3" data-bs-toggle="modal"
+			   data-bs-target="#modalForUsersWhoReadLater">
+				Планируют - @readLater.Count()
+			</a>
+			<!-- Modal -->
+			<div class="modal fade" id="modalForUsersWhoReadLater" tabindex="-1" role="dialog"
+				 aria-labelledby="modalForReviewForBookTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Планируют</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								@{
+									foreach (var user in read.Select(fb => fb.User)) {
+										<h4>
+											<a class="" asp-controller="User" asp-action="One"
+									   asp-route-id="@user.Id">@user.Name</a>
+										</h4>
+									}
+								}
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Ок</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
 		</div>
 
 
@@ -225,38 +343,38 @@
 		</div>
 		<div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab" tabindex="0">
 			@*<div class="d-flex flex-wrap justify-content-between">
-				<ul class="pagination">
-					<li class="page-item disabled">
-						<a class="page-link" href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">1</a>
-						</li>
-					<li class="page-item active">
-						<span class="page-link">2</span>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">3</a>
-						</li>
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-				<div class="dropdown">
-					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownReviewsOrder" 
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Dropdown button
-					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownReviewsOrder">
-						<a class="dropdown-item" href="#">Action</a>
-						<a class="dropdown-item" href="#">Another action</a>
-						<a class="dropdown-item" href="#">Something else here</a>
-					</div>
-				</div>
+			<ul class="pagination">
+			<li class="page-item disabled">
+			<a class="page-link" href="#" aria-label="Previous">
+			<span aria-hidden="true">&laquo;</span>
+			</a>
+			</li>
+			<li class="page-item">
+			<a class="page-link" href="#">1</a>
+			</li>
+			<li class="page-item active">
+			<span class="page-link">2</span>
+			</li>
+			<li class="page-item">
+			<a class="page-link" href="#">3</a>
+			</li>
+			<li class="page-item">
+			<a class="page-link" href="#" aria-label="Next">
+			<span aria-hidden="true">&raquo;</span>
+			</a>
+			</li>
+			</ul>
+			<div class="dropdown">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownReviewsOrder"
+			data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Dropdown button
+			</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownReviewsOrder">
+			<a class="dropdown-item" href="#">Action</a>
+			<a class="dropdown-item" href="#">Another action</a>
+			<a class="dropdown-item" href="#">Something else here</a>
+			</div>
+			</div>
 			</div>*@
 			@{
 				if (ViewBag.reviews.Count == 0) {
@@ -290,9 +408,37 @@
 							@{
 								List<Like> likes = review.Likes.ToList();
 
-								<button type="submit" class="btn btn-outline-secondary border-0">
+								<button type="button" class="btn btn-outline-secondary border-0" data-bs-toggle="modal"
+										data-bs-target="#modalForUsersLikesFromReview_@review.Id">
 									<span class="d-inline">@likes.Count </span>
 								</button>
+								<!-- Modal -->
+								<div class="modal fade" id="modalForUsersLikesFromReview_@review.Id" tabindex="-1" role="dialog"
+									 aria-labelledby="modalForReviewForBookTitle" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title">Лайки</h5>
+											</div>
+											<div class="modal-body">
+												<div class="form-group">
+													@{
+														foreach (var like in likes) {
+															<h4>
+																<a class="" asp-controller="User" asp-action="One"
+											   asp-route-id="@like.User.Id">@like.User.Name</a>
+															</h4>
+														}
+													}
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Ок</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
 
 								bool IsChecked = false;
 								if (ViewBag.user != null) {

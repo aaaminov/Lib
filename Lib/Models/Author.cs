@@ -16,5 +16,16 @@ namespace Lib.Models
         public string? Biography { get; set; }
 
         public virtual ICollection<AuthorBook> AuthorBooks { get; set; }
-    }
+
+
+		public string PhotoPath {
+			get {
+				if (String.IsNullOrEmpty(Photo)) {
+					return string.Empty;
+				}
+				return Photo;
+			}
+		}
+
+	}
 }
