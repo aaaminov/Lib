@@ -2,7 +2,12 @@
 @{
 	Book book = Model;
 	//var authors = LibDbContext.Instance.AuthorBooks.Where(ab => ab.BookId == book.Id).Select(ab => ab.Author).ToList();
-	var authors = book.AuthorBooks.Select(ab => ab.Author).ToList();
+	List<Author> authors = null;
+	try {
+		authors = book.AuthorBooks.Select(ab => ab.Author).ToList();
+	} catch {
+		authors = LibDbContext.Instance.AuthorBooks.Where(ab => ab.BookId == book.Id).Select(ab => ab.Author).ToList();
+	}
 }
 
 <div class="border rounded mb-3" style="width: 256px;">

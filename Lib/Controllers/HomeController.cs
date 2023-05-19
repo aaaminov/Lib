@@ -11,31 +11,53 @@ namespace Lib.Controllers {
             _logger = logger;
         }
 
-        [HttpGet("")]
-        public IActionResult Index() {
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error() {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+		private User getCurrentUser() {
+			int? userId = HttpContext.Session.GetInt32("userId");
+			if (userId.HasValue) {
+				User user = LibDbContext.Instance.Users
+					.Include(u => u.Role)
+					.Include(u => u.Reviews)
+					.FirstOrDefault(u => u.Id == userId);
+				return user;
+			}
+			return null;
+		}
+
+
+		[HttpGet("")]
+        public IActionResult Index(bool? welcome) {
 			ViewBag.popularBooks = LibDbContext.Instance.Books
                 .Include(b => b.AuthorBooks)
                     .ThenInclude(ab => ab.Author)
                 .Include(b => b.FeaturedBooks)
 				.OrderByDescending(b => b.FeaturedBooks.Count)
-				.Take(4).ToList();
+				.Take(10).ToList();
 			ViewBag.newBooks = LibDbContext.Instance.Books
 				.Include(b => b.AuthorBooks)
 					.ThenInclude(ab => ab.Author)
                 .OrderByDescending(b => b.Id)
-				.Take(4).ToList();
+				.Take(10).ToList();
+            ViewBag.bestReviews = LibDbContext.Instance.Reviews
+                .Include(r=>r.Book)
+                .Include(r=>r.Likes)
+                .Include(r=>r.User)
+				.OrderByDescending(r => r.Likes.Count)
+				.Take(10).ToList();
+            ViewBag.user = getCurrentUser();
+			ViewBag.showWelcome = welcome.HasValue;
 			return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         [HttpGet("about")]
         public IActionResult About() {
             return View();
         }
+
 
         [HttpGet("popular")]
         public IActionResult Popular() {
@@ -46,7 +68,9 @@ namespace Lib.Controllers {
                 .Include(b => b.FeaturedBooks)
 				.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
             ViewBag.title = "Популярное";
-			return RedirectToAction("All", "Book");
+            ViewBag.ActivePopular = "active";
+            ViewBag.ShowPopular = true;
+			return View("~/Views/Book/All.cshtml");
 		}
 
         [HttpGet("new")]
@@ -54,9 +78,12 @@ namespace Lib.Controllers {
 			ViewBag.books = LibDbContext.Instance.Books
 				.Take(20).OrderByDescending(b => b.Id).ToList();
 			ViewBag.title = "Новинки";
-			return RedirectToAction("All", "Book");
+			ViewBag.ActiveNew = "active";
+            ViewBag.ShowPopular = false;
+			return View("~/Views/Book/All.cshtml");
 		}
         
+
         [HttpGet("search")]
         public IActionResult Search(string q, int? genre_id) {
             if (string.IsNullOrWhiteSpace(q)) {

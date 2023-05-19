@@ -12,6 +12,7 @@ namespace Lib.Controllers {
 			if (userId.HasValue) {
 				User user = LibDbContext.Instance.Users
 					.Include(u => u.Role)
+					.Include(u => u.Reviews)
 					.FirstOrDefault(u => u.Id == userId);
 				return user;
 			}
@@ -66,20 +67,42 @@ namespace Lib.Controllers {
 		// GET: мб убрать
 		[HttpGet("{id:int}")]
 		public IActionResult One(int id) {
-			if (getCurrentUser().Id == id) {
+			User user = getCurrentUser();
+			if (user?.Id == id) {
 				return RedirectToAction("Profile");
 			}
-			ViewBag.user = LibDbContext.Instance.Users.Find(id);
+			user = LibDbContext.Instance.Users
+					.Include(u => u.Role)
+					.Include(u => u.Reviews)
+					.FirstOrDefault(u => u.Id == id);
+			ViewBag.user = user;
 			List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
-				.Include(fb => fb.Mark)
-				.Include(fb => fb.Book)
-				.Where(fb => fb.UserId == id).ToList();
+					.Include(fb => fb.Mark)
+					.Include(fb => fb.Book)
+					.Where(fb => fb.UserId == user.Id).ToList();
 			ViewBag.featuredBooks = featuredBooks;
 			return View();
 		}
 
 
 
+
+		// GET:
+		[HttpGet("~/profile")]
+		public IActionResult Profile() {
+			User user = getCurrentUser();
+			if (user != null) {
+				ViewBag.user = user;
+				ViewBag.IsProfile = true;
+				List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
+					.Include(fb => fb.Mark)
+					.Include(fb => fb.Book)
+					.Where(fb => fb.UserId == user.Id).ToList();
+				ViewBag.featuredBooks = featuredBooks;
+				return View("~/Views/User/One.cshtml");
+			}
+			return RedirectToAction("Login", "Auth");
+		}
 
 		// GET:
 		[HttpGet("~/profile/edit")]
@@ -127,22 +150,6 @@ namespace Lib.Controllers {
 			return RedirectToAction("Login", "Auth");
 		}
 
-		// GET:
-		[HttpGet("~/profile")]
-		public IActionResult Profile() {
-			User user = getCurrentUser();
-			if (user != null) {
-				List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
-					.Include(fb => fb.Mark)
-					.Include(fb => fb.Book)
-					.Where(fb => fb.UserId == user.Id).ToList();
-				ViewBag.user = user;
-				ViewBag.featuredBooks = featuredBooks;
-				return View();
-			}
-			return RedirectToAction("Login", "Auth");
-		}
-		
 		// GET:
 		[HttpGet("~/featured")]
 		public IActionResult Featured() {

@@ -4,7 +4,9 @@
 <h1>@ViewData["Title"]</h1>
 @{
 	if (@ViewBag.message != null) {
-		<h3>@ViewBag.message</h3>
+		<div class="alert alert-danger" role="alert">
+			@ViewBag.message
+		</div>
 	}
 }
 

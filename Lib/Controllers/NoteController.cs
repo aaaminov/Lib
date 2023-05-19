@@ -17,9 +17,11 @@ namespace Lib.Controllers {
 		public ActionResult All() {
 			int? userId = HttpContext.Session.GetInt32("userId");
 			if (userId.HasValue) {
-				ViewBag.notes = LibDbContext.Instance.Notes
+				List<Note> notes = LibDbContext.Instance.Notes
 					.Include(n => n.User)
 					.Where(n => n.UserId == userId).ToList();
+				notes.Reverse();
+				ViewBag.notes = notes;
 				return View();
 			}
 			return RedirectToAction("Login", "Auth");

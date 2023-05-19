@@ -28,17 +28,22 @@ namespace Lib.Controllers {
 
 		[HttpGet("{id:int}")]
 		public IActionResult One(int id) {
-			ViewBag.genre = LibDbContext.Instance.Genres.Find(id);
+			List<Genre> genres = LibDbContext.Instance.Genres.OrderBy(g => g.Name).ToList();
+			ViewBag.genres = genres;
+			ViewBag.genre = genres.Find(g=> g.Id == id);
 
 			List<Book> books = new List<Book>();
 			List<GenreBook> genreBooks = LibDbContext.Instance.GenreBooks
 				.Include(gb => gb.Book)
+					.ThenInclude(b => b.FeaturedBooks)
 				.Where(gb => gb.GenreId == id).ToList();
 			foreach (GenreBook genreBook in genreBooks) {
 				//books.Add(LibDbContext.Instance.Books.FirstOrDefault(b => b.Id == genreBook.BookId));
 				books.Add(genreBook.Book);
 			}
-			ViewBag.books = books;
+
+			ViewBag.popularBooks = books.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
+			ViewBag.newBooks = books.OrderByDescending(b => b.Id).ToList();
 			return View();
 		}
 	}

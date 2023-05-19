@@ -7,8 +7,10 @@ namespace Lib.Controllers {
     [Route("author")]
     public class AuthorController : Controller {
 
-        // GET:
-        [HttpGet("")]
+		private const int COUNT_OF_SAVED_AUTHORS = 10;
+
+		// GET:
+		[HttpGet("")]
         [HttpGet("all")]
         public ActionResult All() {
             ViewBag.authors = LibDbContext.Instance.Authors.ToList();
@@ -54,7 +56,7 @@ namespace Lib.Controllers {
         // GET:
         [HttpGet("{id:int}")]
         public IActionResult One(int id) {
-            ViewBag.author = LibDbContext.Instance.Authors.Find(id);
+            Author author = LibDbContext.Instance.Authors.Find(id);
 
             List<Book> books = new List<Book>();
             List<AuthorBook> authorBooks = LibDbContext.Instance.AuthorBooks.Where(ab => ab.AuthorId == id).ToList();
@@ -65,29 +67,55 @@ namespace Lib.Controllers {
 				    .Include(b => b.FeaturedBooks)
 					.FirstOrDefault(b => b.Id == authorBook.BookId));
             }
+			ViewBag.author = author;
 			ViewBag.newBooks = books
                 .OrderByDescending(b => b.Id)
 				.Take(4).ToList();
 			ViewBag.popularBooks = books
 				.OrderByDescending(b => b.FeaturedBooks.Count)
 				.Take(4).ToList();
+            SaveAuthorToSession(author);
 			return View();
         }
 
-        //// GET: AuthorController/Delete/5
-        //public ActionResult Delete(int id) {
-        //    return View();
-        //}
+		//// GET: AuthorController/Delete/5
+		//public ActionResult Delete(int id) {
+		//    return View();
+		//}
 
-        //// POST: AuthorController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection) {
-        //    try {
-        //        return RedirectToAction(nameof(Index));
-        //    } catch {
-        //        return View();
-        //    }
-        //}
-    }
+		//// POST: AuthorController/Delete/5
+		//[HttpPost]
+		//[ValidateAntiForgeryToken]
+		//public ActionResult Delete(int id, IFormCollection collection) {
+		//    try {
+		//        return RedirectToAction(nameof(Index));
+		//    } catch {
+		//        return View();
+		//    }
+		//}
+
+
+		private void SaveAuthorToSession(Author author) {
+			List<int> savedIds = new List<int>();
+			for (int i = 0; i < COUNT_OF_SAVED_AUTHORS; i++) {
+
+				int? savedBookId = HttpContext.Session.GetInt32($"savedAuthor_{i}_id");
+				if (!savedBookId.HasValue) {
+					break;
+				}
+				savedIds.Add(savedBookId.Value);
+			}
+			if (savedIds.Contains(author.Id)) {
+				savedIds.Remove(author.Id); // удалить в середине
+			}
+			savedIds.Insert(0, author.Id); // добавить в начало
+			if ((savedIds.Count - 1) == COUNT_OF_SAVED_AUTHORS) {
+				savedIds.RemoveAt(savedIds.Count - 1);
+			}
+			for (int i = 0; i < savedIds.Count; i++) {
+				HttpContext.Session.SetInt32($"savedAuthor_{i}_id", savedIds[i]);
+			}
+		}
+
+	}
 }

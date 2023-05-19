@@ -37,7 +37,7 @@ namespace Lib.Controllers {
 		}
 
 
-		// GET:
+		// POST:
 		[HttpPost("one")]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> One(int book_id, int mark_id) {

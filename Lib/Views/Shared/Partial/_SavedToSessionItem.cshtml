@@ -1,0 +1,116 @@
+﻿@using Microsoft.EntityFrameworkCore;
+@{
+	List<Book> books = new List<Book>();
+
+	int i = 0;
+	int? savedBookId = Context.Session.GetInt32($"savedBook_{i}_id");
+	while (savedBookId.HasValue) {
+		books.Add(LibDbContext.Instance.Books
+			.Include(b => b.AuthorBooks)
+				.ThenInclude(ab => ab.Author)
+			.FirstOrDefault(b => b.Id == savedBookId.Value));
+		i++;
+		savedBookId = Context.Session.GetInt32($"savedBook_{i}_id");
+	}
+
+	List<Author> authors = new List<Author>();
+	int j = 0;
+	int? savedAuthorId = Context.Session.GetInt32($"savedAuthor_{j}_id");
+	while (savedAuthorId.HasValue) {
+		authors.Add(LibDbContext.Instance.Authors
+			//.Include(b => b.AuthorBooks)
+			//	.ThenInclude(ab => ab.Author)
+			.FirstOrDefault(a => a.Id == savedAuthorId.Value));
+		j++;
+		savedAuthorId = Context.Session.GetInt32($"savedAuthor_{j}_id");
+	}
+}
+
+<div class="">
+	@{
+		bool isBooksExist = books.Count != 0 ? true : false;
+		bool isAuthorsExist = authors.Count != 0 ? true : false;
+
+		if (isAuthorsExist || isBooksExist) {
+			<h2>Недавно смотрели</h2>
+			<nav class="mt-3">
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					@{
+						if (isBooksExist) {
+							<button class="nav-link active" id="nav-saved-books-tab" data-bs-toggle="tab" data-bs-target="#nav-saved-books"
+									type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+								Книги
+							</button>
+						}
+						if (isAuthorsExist && !isBooksExist) {
+							<button class="nav-link active" id="nav-saved-authors-tab" data-bs-toggle="tab" data-bs-target="#nav-saved-authors"
+									type="button" role="tab" aria-controls="nav-profile" aria-selected="true">
+								Авторы
+							</button>
+						} else if (isAuthorsExist) {
+							<button class="nav-link" id="nav-saved-authors-tab" data-bs-toggle="tab" data-bs-target="#nav-saved-authors"
+									type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+								Авторы
+							</button>
+						}
+					}
+				</div>
+			</nav>
+
+			<div class="tab-content mt-3 mb-5" id="nav-tabContent">
+				@{
+					if (isBooksExist) {
+						<div class="tab-pane fade show active" id="nav-saved-books" role="tabpanel" aria-labelledby="nav-books-tab" tabindex="0">
+							<div class="overflow-x-scroll">
+								<ul class="list-unstyled row flex-nowrap mb-0">
+									@{
+										if (books.Count != 0) {
+											foreach (var book in books) {
+												<li class="d-inline " style="width: auto;">
+													<partial name="Partial/_BookItem" model="book"></partial>
+												</li>
+											}
+										}
+									}
+								</ul>
+							</div>
+						</div>
+					}
+					if (isAuthorsExist && !isBooksExist) {
+						<div class="tab-pane fade show active" id="nav-saved-authors" role="tabpanel" aria-labelledby="nav-authors-tab" tabindex="0">
+							<div class="overflow-x-scroll">
+								<ul class="list-unstyled row flex-nowrap mb-0">
+									@{
+										if (authors.Count != 0) {
+											foreach (var author in authors) {
+												<li class="d-inline " style="width: auto;">
+													<partial name="Partial/_AuthorItem" model="author"></partial>
+												</li>
+											}
+										}
+									}
+								</ul>
+							</div>
+						</div>
+					} else {
+						<div class="tab-pane fade" id="nav-saved-authors" role="tabpanel" aria-labelledby="nav-authors-tab" tabindex="0">
+							<div class="overflow-x-scroll">
+								<ul class="list-unstyled row flex-nowrap mb-0">
+									@{
+										if (authors.Count != 0) {
+											foreach (var author in authors) {
+												<li class="d-inline " style="width: auto;">
+													<partial name="Partial/_AuthorItem" model="author"></partial>
+												</li>
+											}
+										}
+									}
+								</ul>
+							</div>
+						</div>
+					}
+				}
+			</div>
+		}
+	}
+</div>

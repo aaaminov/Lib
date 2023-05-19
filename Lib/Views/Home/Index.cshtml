@@ -2,16 +2,24 @@
     ViewData["Title"] = "Главная";
 }
 
-<div class="mb-5">
+@{
+	if (ViewBag.showWelcome && @ViewBag.user != null) {
+		<div class="alert alert-success" role="alert">
+			Добро пожаловать, @ViewBag.user.Name!
+		</div>
+	}
+}
+
+@*<div class="mb-5">
 	<img class="img-fluid" src="~/img/home_banner.png" />
-</div>
+</div>*@
 
 @*<div class="text-center">
     <h1 class="display-4">Добро пожаловать на Lib</h1>
 
 </div>*@
 
-<h2>Популярное:</h2>
+<h2>Популярное</h2>
 <div class="overflow-x-scroll mt-3 mb-5">
 	<ul class="list-unstyled row flex-nowrap mb-0">
 		@{
@@ -24,7 +32,7 @@
 	</ul>
 </div>
 
-<h2>Новинки:</h2>
+<h2>Новинки</h2>
 <div class="overflow-x-scroll mt-3 mb-5">
 	<ul class="list-unstyled row flex-nowrap mb-0">
 		@{
@@ -35,6 +43,23 @@
 			}
 		}
 	</ul>
+</div>
+
+<h2>Лучшие рецензии</h2>
+<div class="overflow-x-scroll mt-3 mb-5">
+	<ul class="list-unstyled row flex-nowrap mb-0">
+		@{
+			foreach (var review in ViewBag.bestReviews) {
+				<li class="d-inline " style="width: auto;">
+					<partial name="Partial/_ReviewItem" model="review"></partial>
+				</li>
+			}
+		}
+	</ul>
+</div>
+
+<div>
+	<partial name="Partial/_SavedToSessionItem"></partial>
 </div>
 
 <ul class="mt-4">
@@ -52,3 +77,6 @@
 		<a class="nav-link  " asp-area="" asp-controller="User" asp-action="All">Пользователи</a> @*text-dark*@
 	</li>
 </ul>
+
+
+

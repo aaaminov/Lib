@@ -5,16 +5,20 @@
 	<form asp-controller="Note" asp-action="Create" method="post">
 		<input class="btn btn-primary" type="submit" value="Создать">
 	</form>
-	<div class="mt-2">
+	<ul class="mt-2 list-unstyled row">
 		@{
 			foreach (var note in ViewBag.notes) {
-				<div class="mt-2">
-					<h4>
-						<a class="" asp-controller="Note" asp-action="One" asp-route-id="@note.Id">@note.Name</a>
-					</h4>
-					<span>@note.StrDateOfCreation</span>
-				</div>
+				<li class="d-inline" style="width: auto;">
+					<div class="border rounded mb-3 p-3" style="width: 512px;">
+						<a class="" asp-controller="Note" asp-action="One" asp-route-id="@note.Id" style="text-decoration: none;">
+							<h4 class="text-truncate">
+								@note.Name
+							</h4>
+							<p class="text-secondary mb-0">@note.StrDateOfCreation</p>
+						</a>
+					</div>
+				</li>
 			}
 		}
-	</div>
+	</ul>
 </div>
