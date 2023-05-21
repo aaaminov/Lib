@@ -106,7 +106,7 @@ namespace Lib.Controllers {
 
 		// GET:
 		[HttpGet("~/profile/edit")]
-		public IActionResult EditProfile(string? message) {
+		public IActionResult Update(string? message) {
 			if (message != null) {
 				ViewBag.message = message;
 			}
@@ -121,7 +121,7 @@ namespace Lib.Controllers {
 		// POST:
 		[HttpPost("~/profile/edit")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditProfile(
+		public async Task<ActionResult> Update(
 			string login,
 			string oldPassword,
 			string newPassword1,
@@ -130,13 +130,13 @@ namespace Lib.Controllers {
 			User user = getCurrentUser();
 			if (user != null) {
 				if (!newPassword1.Equals(newPassword2)) {
-					return RedirectToAction("EditProfile", new { message = "Пароли не совпадают" });
+					return RedirectToAction("Update", new { message = "Пароли не совпадают" });
 				}
 				if (LibDbContext.Instance.Users.Where(u => u.Login == login && u.Id != user.Id).Any()) {
-					return RedirectToAction("EditProfile", new { message = "Пользователь с таким логином уже есть" });
+					return RedirectToAction("Update", new { message = "Пользователь с таким логином уже есть" });
 				}
 				if (LibDbContext.Instance.Users.Where(u => u.Id == user.Id && u.Password != oldPassword).Any()) {
-					return RedirectToAction("EditProfile", new { message = "Старый пароль неверный" });
+					return RedirectToAction("Update", new { message = "Старый пароль неверный" });
 				}
 				user.Login = login;
 				user.Password = newPassword1;

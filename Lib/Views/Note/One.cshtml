@@ -1,11 +1,12 @@
 ﻿@{
     ViewData["Title"] = @ViewBag.note.Name;
 }
+
 <a class="btn btn-secondary" asp-area="" asp-controller="Note" asp-action="All">Назад</a>
 <form asp-controller="Note" asp-action="Edit" asp-route-id="@ViewBag.note.Id" method="post">
-	<input class="form-control mt-2" name="newName" value="@ViewBag.note.Name">
+	<input class="form-control mt-2" name="newName" value="@ViewBag.note.Name" placeholder="Заголовок">
 
-	<textarea class="form-control mt-2" name="newContent" rows="5">@ViewBag.note.Content</textarea>
+	<textarea class="form-control mt-2" name="newContent" rows="5" placeholder="Текст">@ViewBag.note.Content</textarea>
 
 	<input class="btn btn-success mt-2" type="submit" value="Сохранить">
 </form>
