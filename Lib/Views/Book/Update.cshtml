@@ -1,10 +1,52 @@
 ﻿@{
-    ViewData["Title"] = "Добавление книги";
-    //ViewData["Title"] = @ViewBag.book.Name + " - Редактирование";
+    if (@ViewBag.message != null) {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.message
+        </div>
+    }
 
+    Book book = ViewBag.book;
+    if (book != null) {
+        ViewData["Title"] = book.Name + " - Редактирование";
+
+        <form asp-controller="Book" asp-action="Update" method="post">
+            <input class="form-control" type="text" name="id" value="@book.Id" hidden />
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="name" placeholder="Имя" value="@book.Name" required />
+			</div>
+			<div class="form_group mt-2 mb-2">
+				<textarea class="form-control" name="description" rows="5" placeholder="Описание" required>@book.Description</textarea>
+			</div>
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="photo" placeholder="Ссылка на фото" value="@book.Photo" required />
+            </div>
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="date_of_creation" placeholder="Дата создания" value="@book.DateOfCreation" required />
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
+        </form>
+        <form asp-controller="Author" asp-action="Delete" asp-route-id="@book.Id" method="post">
+            <input class="btn btn-danger mt-2" type="submit" value="Удалить">
+        </form>
+
+    } else {
+        ViewData["Title"] = "Добавление книги";
+
+        <form asp-controller="Book" asp-action="Update" method="post">
+            <input class="form-control" type="text" name="id" value="-1" hidden />
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="name" placeholder="Имя" required />
+			</div>
+			<div class="form_group mt-2 mb-2">
+				<textarea class="form-control" name="description" rows="5" placeholder="Описание" required></textarea>
+			</div>
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="photo" placeholder="Ссылка на фото" required />
+            </div>
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" date_of_creation" placeholder="Дата создания" required />
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
+        </form>
+    }
 }
-<form>
-    <input type="text" />
-    <input type="submit" />
-</form>
-

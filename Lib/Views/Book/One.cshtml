@@ -12,6 +12,12 @@
 
 		<div class="mb-2">
 			<h2>@book.Name</h2>
+			@{
+				//User user = @ViewBag.user;
+				if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
+					<a class="btn btn-primary mt-2 mb-2" asp-area="" asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id">Редактировать</a>
+				}
+			}
 			<h5>
 				@{
 					for (int i = 0; i < ViewBag.authors.Count; i++) {
@@ -75,8 +81,11 @@
 								<div class="col-5">
 									<div class="">
 										<div class="progress">
+											@{
+												string percentStr = percent.ToString().Replace(',', '.');
+											}
 											<div class="progress-bar" role="progressbar" aria-label="Basic example"
-												 style="width: @percent%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+												 style="width: @percentStr%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 										</div>
 									</div>
 								</div>
@@ -145,7 +154,7 @@
 
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
 											<input class="btn btn-primary" type="submit" value="Сохранить" />
 										</div>
 									</form>
@@ -212,12 +221,12 @@
 															@review.Content
 														}
 													}
-																											</textarea>
+												</textarea>
 											</div>
 
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
 											<input class="btn btn-primary" type="submit" value="Сохранить" />
 										</div>
 									</form>
@@ -272,7 +281,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Ок</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ок</button>
 						</div>
 					</div>
 				</div>
@@ -303,7 +312,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Ок</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ок</button>
 						</div>
 					</div>
 				</div>
@@ -423,6 +432,9 @@
 											<div class="modal-body">
 												<div class="form-group">
 													@{
+														if (likes.Count == 0) {
+															<h4>Пусто</h4>
+														}
 														foreach (var like in likes) {
 															<h4>
 																<a class="" asp-controller="User" asp-action="One"
@@ -433,7 +445,7 @@
 												</div>
 											</div>
 											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-dismiss="modal">Ок</button>
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ок</button>
 											</div>
 										</div>
 									</div>
@@ -461,9 +473,18 @@
 								} else {
 									<form asp-controller="Review" asp-action="Like"
 						  asp-route-review_id="@review.Id" asp-route-book_id="@book.Id" method="post" class="mx-1 d-inline">
-										<button type="submit" class="btn btn-outline-danger border-0">
+										<button type="submit" class="btn btn-outline-su border-0">
 											<img src="~/img/svg/hand-thumbs-up.svg" />
 										</button>
+									</form>
+								}
+
+								if (review != null) {
+									User user = ViewBag.User;
+									<form class="form-inline mx-2 d-inline" asp-controller="Review" asp-action="DeleteByAdmin" method="post">
+										<input type="hidden" name="book_id" value="@book.Id" />
+										<input type="hidden" name="user_id" value="@review.UserId" />
+										<input class="btn btn-danger" type="submit" value="Удалить" />
 									</form>
 								}
 							}

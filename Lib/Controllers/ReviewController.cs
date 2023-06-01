@@ -55,6 +55,24 @@ namespace Lib.Controllers {
 		}
 
 		// POST:
+		[HttpPost("delete_by_admin")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> DeleteByAdmin(int book_id, int user_id) {
+			User user = UserController.getCurrentUser(HttpContext);
+			if (user != null && UserController.isCurrentUserAdmin(user)) {
+				Review review = LibDbContext.Instance.Reviews
+					.FirstOrDefault(r => r.UserId == user_id && r.BookId == book_id);
+				foreach (var like in review.Likes) {
+					LibDbContext.Instance.Likes.Remove(like);
+				}
+				LibDbContext.Instance.Reviews.Remove(review);
+				await LibDbContext.Instance.SaveChangesAsync();
+				return Redirect($"{Url.Action("One", "Book", new { id = book_id })}");
+			}
+			return RedirectToAction("All");
+		}
+
+		// POST:
 		[HttpPost("like")]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Like(int review_id, int book_id) {

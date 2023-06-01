@@ -1,10 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Добавление автора";
-    //ViewData["Title"] = @ViewBag.author.Name + " - Редактирование";
+    if (@ViewBag.message != null) {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.message
+        </div>
+    }
 
+    Author author = ViewBag.author;
+    if (author != null) {
+        ViewData["Title"] = author.Name + " - Редактирование";
+
+        <form asp-controller="Author" asp-action="Update" method="post">
+            <input class="form-control" type="text" name="id" value="@author.Id" hidden />
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="name" placeholder="Имя" value="@author.Name" required />
+			</div>
+			<div class="form_group mt-2 mb-2">
+				<input class="form-control" type="text" name="photo" placeholder="Ссылка на фото" value="@author.Photo" required />
+			</div>
+            <div class="form_group mt-2 mb-2">
+                <textarea class="form-control" name="biography" rows="5" placeholder="Биография" required>@author.Biography</textarea>
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
+        </form>
+        <form asp-controller="Author" asp-action="Delete" asp-route-id="@author.Id" method="post">
+            <input class="btn btn-danger mt-2" type="submit" value="Удалить">
+        </form>
+
+    } else {
+        ViewData["Title"] = "Добавление автора";
+
+        <form asp-controller="Author" asp-action="Update" method="post">
+            <input class="form-control" type="text" name="id" value="-1" hidden />
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="name" placeholder="Имя" required />
+            </div>
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="photo" placeholder="Ссылка на фото" required />
+            </div>
+            <div class="form_group mt-2 mb-2">
+                <textarea class="form-control" name="biography" rows="5" placeholder="Биография" required></textarea>
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
+        </form>
+    }
 }
-<form>
-    <input type="text" />
-    <input type="submit" />
-</form>
-

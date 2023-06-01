@@ -1,18 +1,33 @@
 ﻿@{
-    ViewData["Title"] = @ViewBag.author.Name /*+ " - Автор"*/;
+	Author author = ViewBag.author;
+	ViewData["Title"] = @author.Name /*+ " - Автор"*/;
 }
+
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a asp-controller="Author" asp-action="All">Все авторы</a></li>
+		<li class="breadcrumb-item">@author.Name</li>
+	</ol>
+</nav>
+
 
 <div class="row mb-5">
 	<div class="col-xs-12 col-sm-4 col-md-3">
-		<img class="rounded" style="width: 100%" alt="@ViewBag.author.Name" src="@ViewBag.author.Photo" />
-
+		<img class="rounded" style="width: 100%" alt="@author.Name" src="@author.PhotoPath" />
 	</div>
 
 	<div class="col-xs-12 col-sm-8 col-md-9">
-		<h2>@ViewBag.author.Name</h2>
+		<h2>@author.Name</h2>
+		<p>@author.Biography</p>
+		@{
+			User user = @ViewBag.user;
+			if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
+				<a class="btn btn-primary mt-2 mb-2" asp-area="" asp-controller="Author" asp-action="Edit" asp-route-id="@author.Id">Редактировать</a>
+			}
 
-		<p>@ViewBag.author.Biography</p>
+		}
 	</div>
+
 </div>
 
 <nav class="mt-3">

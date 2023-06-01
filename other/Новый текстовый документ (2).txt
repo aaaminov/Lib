@@ -1,0 +1,5 @@
+https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Pushkin_Alexander_by_Sokolov_P..jpg/800px-Pushkin_Alexander_by_Sokolov_P..jpg
+
+реверснуть списки (рецензии там, избранные и мб др.)
+поменять вывод message
+

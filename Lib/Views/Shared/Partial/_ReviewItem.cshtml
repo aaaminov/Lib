@@ -8,32 +8,36 @@
 	//} catch {
 	//	authors = LibDbContext.Instance.AuthorBooks.Where(ab => ab.BookId == book.Id).Select(ab => ab.Author).ToList();
 	//}
+
+	if (review != null) {
+
+		<div class="border rounded mb-3 p-2" style="width: 512px;">
+			<h5>
+				<a asp-controller="User" asp-action="One" asp-route-id="@review.User.Id" class="" style="text-decoration: none;">
+					@review.User.Name
+				</a>
+			</h5>
+			<h5 class="text-truncate">
+				<span class="text-secondary">На книгу</span>
+				<a asp-controller="Book" asp-action="One" asp-route-id="@review.Book.Id" class="" style="text-decoration: none;">
+					@review.Book.Name
+				</a>
+			</h5>
+			<div class="text-secondary">
+				@review.StrDateOfCreation
+			</div>
+			<h5 class="py-1">
+				<img class="align-baseline text-warning" src="~/img/svg/star-fill.svg" />
+				<span class="align-baseline d-inline">@review.Rating</span>
+			</h5>
+			<div class="text-truncate pb-1">
+				@review.Content
+			</div>
+			<div class="text-secondary pb-1">
+				Лайков - @review.Likes.Count
+			</div>
+
+		</div>
+	}
 }
 
-<div class="border rounded mb-3 p-2" style="width: 512px;">
-	<h5>
-		<a asp-controller="User" asp-action="One" asp-route-id="@review.User.Id" class="" style="text-decoration: none;">
-			@review.User.Name
-		</a>
-	</h5>
-	<h5 class="text-truncate">
-		<span class="text-secondary">На книгу</span>
-		<a asp-controller="Book" asp-action="One" asp-route-id="@review.Book.Id" class="" style="text-decoration: none;">
-			@review.Book.Name
-		</a>
-	</h5>
-	<div class="text-secondary">
-		@review.StrDateOfCreation
-	</div>
-	<h5 class="py-1">
-		<img class="align-baseline text-warning" src="~/img/svg/star-fill.svg" />
-		<span class="align-baseline d-inline">@review.Rating</span>
-	</h5>
-	<div class="text-truncate pb-1">
-		@review.Content
-	</div>
-	<div class="text-secondary pb-1">
-		Лайков - @review.Likes.Count
-	</div>
-	
-</div>

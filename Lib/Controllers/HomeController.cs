@@ -16,17 +16,17 @@ namespace Lib.Controllers {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-		private User getCurrentUser() {
-			int? userId = HttpContext.Session.GetInt32("userId");
-			if (userId.HasValue) {
-				User user = LibDbContext.Instance.Users
-					.Include(u => u.Role)
-					.Include(u => u.Reviews)
-					.FirstOrDefault(u => u.Id == userId);
-				return user;
-			}
-			return null;
-		}
+		//private User getCurrentUser() {
+		//	int? userId = HttpContext.Session.GetInt32("userId");
+		//	if (userId.HasValue) {
+		//		User user = LibDbContext.Instance.Users
+		//			.Include(u => u.Role)
+		//			.Include(u => u.Reviews)
+		//			.FirstOrDefault(u => u.Id == userId);
+		//		return user;
+		//	}
+		//	return null;
+		//}
 
 
 		[HttpGet("")]
@@ -48,8 +48,14 @@ namespace Lib.Controllers {
                 .Include(r=>r.User)
 				.OrderByDescending(r => r.Likes.Count)
 				.Take(10).ToList();
-            ViewBag.user = getCurrentUser();
 			ViewBag.showWelcome = welcome.HasValue;
+
+			User user = UserController.getCurrentUser(HttpContext);
+			if (user != null) {
+				ViewBag.user = user;
+				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
+			}
+
 			return View();
         }
 
@@ -70,6 +76,13 @@ namespace Lib.Controllers {
             ViewBag.title = "Популярное";
             ViewBag.ActivePopular = "active";
             ViewBag.ShowPopular = true;
+
+			User user = UserController.getCurrentUser(HttpContext);
+			if (user != null) {
+				ViewBag.user = user;
+				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
+			}
+
 			return View("~/Views/Book/All.cshtml");
 		}
 
@@ -80,6 +93,13 @@ namespace Lib.Controllers {
 			ViewBag.title = "Новинки";
 			ViewBag.ActiveNew = "active";
             ViewBag.ShowPopular = false;
+
+			User user = UserController.getCurrentUser(HttpContext);
+			if (user != null) {
+				ViewBag.user = user;
+				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
+			}
+
 			return View("~/Views/Book/All.cshtml");
 		}
         

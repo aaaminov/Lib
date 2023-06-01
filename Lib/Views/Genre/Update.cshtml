@@ -1,10 +1,35 @@
 ﻿@{
-    ViewData["Title"] = "Добавление жанра";
-    //ViewData["Title"] = @ViewBag.genre.Name + " - Редактирование";
+    if (@ViewBag.message != null) {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.message
+        </div>
+    }
 
+    Genre genre = ViewBag.genre;
+    if (genre != null) {
+        ViewData["Title"] = genre.Name + " - Редактирование";
+
+        <form asp-controller="Genre" asp-action="Update" method="post">
+            <input class="form-control" type="text" name="id" value="@genre.Id" hidden />
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="name" placeholder="Название" value="@genre.Name" required />
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
+        </form>
+        <form asp-controller="Genre" asp-action="Delete" asp-route-id="@genre.Id" method="post">
+            <input class="btn btn-danger mt-2" type="submit" value="Удалить">
+        </form>
+
+    } else {
+        ViewData["Title"] = "Добавление жанра";
+
+        <form asp-controller="Genre" asp-action="Update" method="post">
+            <input class="form-control" type="text" name="id" value="-1" hidden />
+            <div class="form_group mt-2 mb-2">
+                <input class="form-control" type="text" name="name" placeholder="Название" required />
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
+        </form>
+    }
 }
-<form>
-    <input type="text" />
-    <input type="submit" />
-</form>
 

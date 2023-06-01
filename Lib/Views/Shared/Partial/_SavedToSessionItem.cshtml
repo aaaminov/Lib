@@ -5,10 +5,15 @@
 	int i = 0;
 	int? savedBookId = Context.Session.GetInt32($"savedBook_{i}_id");
 	while (savedBookId.HasValue) {
-		books.Add(LibDbContext.Instance.Books
+		Book findedBook = LibDbContext.Instance.Books
 			.Include(b => b.AuthorBooks)
 				.ThenInclude(ab => ab.Author)
-			.FirstOrDefault(b => b.Id == savedBookId.Value));
+			.FirstOrDefault(b => b.Id == savedBookId.Value);
+		if (findedBook != null) {
+			books.Add(findedBook);
+		} else {
+			Context.Session.Remove($"savedBook_{i}_id"); // мб ее удалили
+		}
 		i++;
 		savedBookId = Context.Session.GetInt32($"savedBook_{i}_id");
 	}
@@ -17,10 +22,15 @@
 	int j = 0;
 	int? savedAuthorId = Context.Session.GetInt32($"savedAuthor_{j}_id");
 	while (savedAuthorId.HasValue) {
-		authors.Add(LibDbContext.Instance.Authors
+		Author findedAuthor = LibDbContext.Instance.Authors
 			//.Include(b => b.AuthorBooks)
 			//	.ThenInclude(ab => ab.Author)
-			.FirstOrDefault(a => a.Id == savedAuthorId.Value));
+			.FirstOrDefault(a => a.Id == savedAuthorId.Value);
+		if (findedAuthor != null) {
+			authors.Add(findedAuthor);
+		} else {
+			Context.Session.Remove($"savedAuthor_{j}_id"); // мб ее удалили
+		}
 		j++;
 		savedAuthorId = Context.Session.GetInt32($"savedAuthor_{j}_id");
 	}

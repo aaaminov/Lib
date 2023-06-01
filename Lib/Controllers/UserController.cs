@@ -7,16 +7,21 @@ namespace Lib.Controllers {
 	[Route("user")]
 	public class UserController : Controller {
 
-		private User getCurrentUser() {
-			int? userId = HttpContext.Session.GetInt32("userId");
+		public static User getCurrentUser(HttpContext context) {
+			int? userId = context.Session.GetInt32("userId");
 			if (userId.HasValue) {
 				User user = LibDbContext.Instance.Users
+					.Include(u => u.Likes)
 					.Include(u => u.Role)
 					.Include(u => u.Reviews)
 					.FirstOrDefault(u => u.Id == userId);
 				return user;
 			}
 			return null;
+		}
+
+		public static bool isCurrentUserAdmin(User user) {
+			return user.RoleId == 2 ? true : false;
 		}
 
 		// GET:
@@ -64,10 +69,10 @@ namespace Lib.Controllers {
 		//          }
 		//      }
 
-		// GET: мб убрать
+		// GET:
 		[HttpGet("{id:int}")]
 		public IActionResult One(int id) {
-			User user = getCurrentUser();
+			User user = getCurrentUser(HttpContext);
 			if (user?.Id == id) {
 				return RedirectToAction("Profile");
 			}
@@ -90,7 +95,7 @@ namespace Lib.Controllers {
 		// GET:
 		[HttpGet("~/profile")]
 		public IActionResult Profile() {
-			User user = getCurrentUser();
+			User user = getCurrentUser(HttpContext);
 			if (user != null) {
 				ViewBag.user = user;
 				ViewBag.IsProfile = true;
@@ -110,7 +115,7 @@ namespace Lib.Controllers {
 			if (message != null) {
 				ViewBag.message = message;
 			}
-			User user = getCurrentUser();
+			User user = getCurrentUser(HttpContext);
 			if (user != null) {
 				ViewBag.user = user;
 				return View();
@@ -127,7 +132,7 @@ namespace Lib.Controllers {
 			string newPassword1,
 			string newPassword2,
 			string name) {
-			User user = getCurrentUser();
+			User user = getCurrentUser(HttpContext);
 			if (user != null) {
 				if (!newPassword1.Equals(newPassword2)) {
 					return RedirectToAction("Update", new { message = "Пароли не совпадают" });
@@ -153,7 +158,7 @@ namespace Lib.Controllers {
 		// GET:
 		[HttpGet("~/featured")]
 		public IActionResult Featured() {
-			User user = getCurrentUser();
+			User user = getCurrentUser(HttpContext);
 			if (user != null) {
 				List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
 					.Include(fb => fb.Mark)

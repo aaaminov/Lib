@@ -1,10 +1,16 @@
 ﻿@{
-	ViewData["Title"] = @ViewBag.title;
+	ViewData["Title"] = @ViewBag.title != null ? @ViewBag.title : "Все книги";
 }
 <nav aria-label="breadcrumb">
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Все книги</a></li>
-		<li class="breadcrumb-item active" aria-current="page">@ViewBag.title</li>
+		<li class="breadcrumb-item active" aria-current="page">
+			@{
+				if (@ViewBag.title != "Все книги") {
+					@ViewBag.title
+				}
+			}
+		</li>
 	</ol>
 </nav>
 
@@ -27,6 +33,15 @@
 		<div class="">
 			<h2>@ViewBag.title</h2>
 		</div>
+
+		@{
+			User user = @ViewBag.user;
+			if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
+				<h5>
+					<a class="btn btn-primary mt-2 mb-2" asp-area="" asp-controller="Book" asp-action="Create">Добавить книгу</a>
+				</h5>
+			}
+		}
 
 		<div class="">
 			<ul class="list-unstyled row mt-3">
