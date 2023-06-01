@@ -2,4 +2,5 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Pushkin_Alexander_by_S
 
 реверснуть списки (рецензии там, избранные и мб др.)
 поменять вывод message
+admin панель доделать
 

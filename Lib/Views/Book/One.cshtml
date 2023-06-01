@@ -479,7 +479,7 @@
 									</form>
 								}
 
-								if (review != null) {
+								if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
 									User user = ViewBag.User;
 									<form class="form-inline mx-2 d-inline" asp-controller="Review" asp-action="DeleteByAdmin" method="post">
 										<input type="hidden" name="book_id" value="@book.Id" />
