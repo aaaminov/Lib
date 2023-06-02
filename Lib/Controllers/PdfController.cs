@@ -221,7 +221,7 @@ namespace Lib.Controllers {
 					<thead>
 						<tr>
 							<th scope=""col"">Название книги</th>
-							<th scope=""col"">Кол-во в избранных (всего)</th>
+							<th scope=""col"">Кол-во в избранных</th>
 							<th scope=""col"">Рецензий</th>
 						</tr>
 					</thead>
