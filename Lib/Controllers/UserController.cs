@@ -1,4 +1,5 @@
-﻿using Lib.Models;
+﻿using DinkToPdf;
+using Lib.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,8 @@ namespace Lib.Controllers {
 	[Route("user")]
 	public class UserController : Controller {
 
+
+
 		public static User getCurrentUser(HttpContext context) {
 			int? userId = context.Session.GetInt32("userId");
 			if (userId.HasValue) {
@@ -14,6 +17,8 @@ namespace Lib.Controllers {
 					.Include(u => u.Likes)
 					.Include(u => u.Role)
 					.Include(u => u.Reviews)
+					.Include(u => u.Notes)
+					.Include(u => u.FeaturedBooks)
 					.FirstOrDefault(u => u.Id == userId);
 				return user;
 			}
@@ -170,7 +175,6 @@ namespace Lib.Controllers {
 			}
 			return RedirectToAction("Login", "Auth");
 		}
-
 
 
 		//// GET: AuthorController/Delete/5

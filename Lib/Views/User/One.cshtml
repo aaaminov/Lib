@@ -3,25 +3,40 @@
 	ViewData["Title"] = user.Name /*+ " - Пользователь"*/;
 }
 
-<h2>@user.Name</h2>
 
 @{
-	if (user.RoleId == 2) {
-		<p>@user.Role.Name</p>
-	}
+	<div class="border rounded mb-3 p-3">
+		<h2>@user.Name</h2>
+		@{
+			if (user.RoleId == 2) {
+				<h3 class=" text-warning">[@user.Role.Name]</h3>
+			}
+			if (ViewBag.IsProfile != null && ViewBag.IsProfile) {
+				<div class="mt-3">
+					<a class="btn btn-primary mb-2" asp-area="" asp-controller="User" asp-action="Update">Редактировать</a>
+					<form asp-controller="Auth" asp-action="Logout" method="post">
+						<input class="btn btn-danger" type="submit" value="Выйти">
+					</form>
+				</div>
+			}
+		}
+	</div>
+	
+	<div class="">
+
+	</div>
 
 	if (ViewBag.IsProfile != null && ViewBag.IsProfile) {
-		<div class="ptb-2 ">
-			<a class="btn btn-primary mb-2" asp-area="" asp-controller="User" asp-action="Update">Редактировать</a>
-			<form asp-controller="Auth" asp-action="Logout" method="post">
-				<input class="btn btn-danger mb-2" type="submit" value="Выйти">
-			</form>
+		<div class=" mb-3 p-3">
+			<a class="btn btn-secondary" asp-area="" asp-controller="Pdf" asp-action="GeneratePDF" asp-route-type="UserStatistics">Статистика</a>
+			<a class="btn btn-secondary" asp-area="" asp-controller="Pdf" asp-action="GeneratePDF" asp-route-type="PopularBooksByMounth">Популярные книги за месяц</a>
+			<a class="btn btn-secondary" asp-area="" asp-controller="Pdf" asp-action="GeneratePDF" asp-route-type="PopularBooks">Популярные книги за всё время</a>
 		</div>
 	}
 }
 
 
-<div class="mt-5">
+<div class="mt-3">
 	<nav class="mt-3">
 		<div class="nav nav-tabs" id="nav-tab" role="tablist">
 			@{

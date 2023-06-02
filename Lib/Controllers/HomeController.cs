@@ -70,9 +70,9 @@ namespace Lib.Controllers {
 			ViewBag.books = LibDbContext.Instance.Books
 				//.Include(b => b.AuthorBooks)
 				//	.ThenInclude(ab => ab.Author)
-                .Take(20)
                 .Include(b => b.FeaturedBooks)
-				.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
+				.OrderByDescending(b => b.FeaturedBooks.Count)
+				.Take(20).ToList();
             ViewBag.title = "Популярное";
             ViewBag.ActivePopular = "active";
             ViewBag.ShowPopular = true;
@@ -89,7 +89,8 @@ namespace Lib.Controllers {
         [HttpGet("new")]
         public IActionResult New() {
 			ViewBag.books = LibDbContext.Instance.Books
-				.Take(20).OrderByDescending(b => b.Id).ToList();
+				.OrderByDescending(b => b.Id)
+				.Take(20).ToList();
 			ViewBag.title = "Новинки";
 			ViewBag.ActiveNew = "active";
             ViewBag.ShowPopular = false;

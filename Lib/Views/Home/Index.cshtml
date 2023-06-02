@@ -19,6 +19,29 @@
 
 </div>*@
 
+<div class=" mb-3">
+	<div class="d-inline">
+		<a class="btn btn-outline-secondary d-inline" asp-area="" asp-controller="Author" asp-action="All">Авторы</a>
+		<a class="btn btn-outline-secondary d-inline" asp-area="" asp-controller="Genre" asp-action="All">Жанры</a>
+	</div>
+</div>
+
+@*<ul class="mt-4">
+	<h2>Тестовое:</h2>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="Author" asp-action="All">Авторы</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="Genre" asp-action="All">Жанры</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="Book" asp-action="All">Книги</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link  " asp-area="" asp-controller="User" asp-action="All">Пользователи</a>
+	</li>
+</ul>*@
+
 <h2>Популярное</h2>
 <div class="overflow-x-scroll mt-3 mb-5">
 	<ul class="list-unstyled row flex-nowrap mb-0">
@@ -62,21 +85,7 @@
 	<partial name="Partial/_SavedToSessionItem"></partial>
 </div>
 
-<ul class="mt-4">
-	<h2>Тестовое:</h2>
-	<li class="nav-item">
-		<a class="nav-link  " asp-area="" asp-controller="Author" asp-action="All">Авторы</a> @*text-dark*@
-	</li>
-	<li class="nav-item">
-		<a class="nav-link  " asp-area="" asp-controller="Genre" asp-action="All">Жанры</a> @*text-dark*@
-	</li>
-	<li class="nav-item">
-		<a class="nav-link  " asp-area="" asp-controller="Book" asp-action="All">Книги</a> @*text-dark*@
-	</li>
-	<li class="nav-item">
-		<a class="nav-link  " asp-area="" asp-controller="User" asp-action="All">Пользователи</a> @*text-dark*@
-	</li>
-</ul>
+
 
 
 

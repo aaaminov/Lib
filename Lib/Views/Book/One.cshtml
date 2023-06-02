@@ -221,7 +221,7 @@
 															@review.Content
 														}
 													}
-												</textarea>
+															</textarea>
 											</div>
 
 										</div>
@@ -351,146 +351,148 @@
 			</p>
 		</div>
 		<div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab" tabindex="0">
-			@*<div class="d-flex flex-wrap justify-content-between">
-			<ul class="pagination">
-			<li class="page-item disabled">
-			<a class="page-link" href="#" aria-label="Previous">
-			<span aria-hidden="true">&laquo;</span>
-			</a>
-			</li>
-			<li class="page-item">
-			<a class="page-link" href="#">1</a>
-			</li>
-			<li class="page-item active">
-			<span class="page-link">2</span>
-			</li>
-			<li class="page-item">
-			<a class="page-link" href="#">3</a>
-			</li>
-			<li class="page-item">
-			<a class="page-link" href="#" aria-label="Next">
-			<span aria-hidden="true">&raquo;</span>
-			</a>
-			</li>
-			</ul>
-			<div class="dropdown">
-			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownReviewsOrder"
-			data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Dropdown button
-			</button>
-			<div class="dropdown-menu" aria-labelledby="dropdownReviewsOrder">
-			<a class="dropdown-item" href="#">Action</a>
-			<a class="dropdown-item" href="#">Another action</a>
-			<a class="dropdown-item" href="#">Something else here</a>
-			</div>
-			</div>
-			</div>*@
+			@{
+				//List<Review> reviewsByDate = ViewBag.reviews;
+				//List<Review> reviewsByLikes = reviewsByDate.OrderByDescending(r => r.Likes.Count()).ToList();
+			}
+			@*<div class="d-flex flex-wrap justify-content-between mb-3">
+				<ul class="pagination">
+					<li class="page-item disabled">
+						<a class="page-link" href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="#">1</a>
+					</li>
+					<li class="page-item active">
+						<span class="page-link">2</span>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="#">3</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+				<div class="dropdown">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownReviewsOrder"
+							data-bs-toggle="dropdown" /*aria-haspopup="true"*/ aria-expanded="false">
+						Сортировка
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownReviewsOrder">
+						<a class="dropdown-item" href="#">По дате</a>
+						<a class="dropdown-item" href="#">По лайкам</a>
+					</div>
+				</div>
+				</div>*@
 			@{
 				if (ViewBag.reviews.Count == 0) {
 					<div class="p-1">
 						Пусто
 					</div>
-				}
-				for (int i = 0; i < ViewBag.reviews.Count; i++) {
+				} else {
+					for (int i = 0; i < reviews.Count; i++) {
 
-					Review review = @ViewBag.reviews[i];
+						Review review = @reviews[i];
 
+						<div id="@review.Id" class="border rounded p-3 mb-3">
+							<h5>
+								<a asp-controller="User" asp-action="One" asp-route-id="@review.User.Id" class="" style="text-decoration: none;">
+									@review.User.Name
+								</a>
+							</h5>
+							<div class="text-secondary">
+								@review.StrDateOfCreation
+							</div>
+							<h5 class="py-1">
+								<img class="align-baseline text-warning" src="~/img/svg/star-fill.svg" />
+								<span class="align-baseline d-inline">@review.Rating</span>
+							</h5>
+							<div class="pb-1">
+								@review.Content
+							</div>
+							<div class="">
+								@{
+									List<Like> likes = review.Likes.ToList();
 
-
-					<div id="@review.Id" class="border rounded p-3 mb-3">
-						<h5>
-							<a asp-controller="User" asp-action="One" asp-route-id="@review.User.Id" class="" style="text-decoration: none;">
-								@review.User.Name
-							</a>
-						</h5>
-						<div class="text-secondary">
-							@review.StrDateOfCreation
-						</div>
-						<h5 class="py-1">
-							<img class="align-baseline text-warning" src="~/img/svg/star-fill.svg" />
-							<span class="align-baseline d-inline">@review.Rating</span>
-						</h5>
-						<div class="pb-1">
-							@review.Content
-						</div>
-						<div class="">
-							@{
-								List<Like> likes = review.Likes.ToList();
-
-								<button type="button" class="btn btn-outline-secondary border-0" data-bs-toggle="modal"
-										data-bs-target="#modalForUsersLikesFromReview_@review.Id">
-									<span class="d-inline">@likes.Count </span>
-								</button>
-								<!-- Modal -->
-								<div class="modal fade" id="modalForUsersLikesFromReview_@review.Id" tabindex="-1" role="dialog"
-									 aria-labelledby="modalForReviewForBookTitle" aria-hidden="true">
-									<div class="modal-dialog modal-dialog-centered" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title">Лайки</h5>
-											</div>
-											<div class="modal-body">
-												<div class="form-group">
-													@{
-														if (likes.Count == 0) {
-															<h4>Пусто</h4>
-														}
-														foreach (var like in likes) {
-															<h4>
-																<a class="" asp-controller="User" asp-action="One"
-											   asp-route-id="@like.User.Id">@like.User.Name</a>
-															</h4>
-														}
-													}
+									<button type="button" class="btn btn-outline-secondary border-0" data-bs-toggle="modal"
+											data-bs-target="#modalForUsersLikesFromReview_@review.Id">
+										<span class="d-inline">@likes.Count </span>
+									</button>
+									<!-- Modal -->
+									<div class="modal fade" id="modalForUsersLikesFromReview_@review.Id" tabindex="-1" role="dialog"
+										 aria-labelledby="modalForReviewForBookTitle" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Лайки</h5>
 												</div>
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ок</button>
+												<div class="modal-body">
+													<div class="form-group">
+														@{
+															if (likes.Count == 0) {
+																<h4>Пусто</h4>
+															}
+															foreach (var like in likes) {
+																<h4>
+																	<a class="" asp-controller="User" asp-action="One"
+											   asp-route-id="@like.User.Id">@like.User.Name</a>
+																</h4>
+															}
+														}
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ок</button>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
 
 
-								bool IsChecked = false;
-								if (ViewBag.user != null) {
-									User user = ViewBag.User;
+									bool IsChecked = false;
+									if (ViewBag.user != null) {
+										User user = ViewBag.User;
 
-									for (int j = 0; j < likes.Count; j++) {
-										if (likes.Select(l => l.UserId).Contains(user.Id)) {
-											IsChecked = true;
+										for (int j = 0; j < likes.Count; j++) {
+											if (likes.Select(l => l.UserId).Contains(user.Id)) {
+												IsChecked = true;
+											}
 										}
 									}
-								}
 
-								if (IsChecked) {
-									<form asp-controller="Review" asp-action="Unlike"
+									if (IsChecked) {
+										<form asp-controller="Review" asp-action="Unlike"
 						  asp-route-review_id="@review.Id" asp-route-book_id="@book.Id" method="post" class="mx-1 d-inline">
-										<button type="submit" class="btn btn-outline-danger border-0">
-											<img src="~/img/svg/hand-thumbs-up-fill.svg" />
-										</button>
-									</form>
-								} else {
-									<form asp-controller="Review" asp-action="Like"
+											<button type="submit" class="btn btn-outline-danger border-0">
+												<img src="~/img/svg/hand-thumbs-up-fill.svg" />
+											</button>
+										</form>
+									} else {
+										<form asp-controller="Review" asp-action="Like"
 						  asp-route-review_id="@review.Id" asp-route-book_id="@book.Id" method="post" class="mx-1 d-inline">
-										<button type="submit" class="btn btn-outline-su border-0">
-											<img src="~/img/svg/hand-thumbs-up.svg" />
-										</button>
-									</form>
-								}
+											<button type="submit" class="btn btn-outline-su border-0">
+												<img src="~/img/svg/hand-thumbs-up.svg" />
+											</button>
+										</form>
+									}
 
-								if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
-									User user = ViewBag.User;
-									<form class="form-inline mx-2 d-inline" asp-controller="Review" asp-action="DeleteByAdmin" method="post">
-										<input type="hidden" name="book_id" value="@book.Id" />
-										<input type="hidden" name="user_id" value="@review.UserId" />
-										<input class="btn btn-danger" type="submit" value="Удалить" />
-									</form>
+									if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
+										User user = ViewBag.User;
+										<form class="form-inline mx-2 d-inline" asp-controller="Review" asp-action="DeleteByAdmin" method="post">
+											<input type="hidden" name="book_id" value="@book.Id" />
+											<input type="hidden" name="user_id" value="@review.UserId" />
+											<input class="btn btn-danger" type="submit" value="Удалить" />
+										</form>
+									}
 								}
-							}
+							</div>
+
 						</div>
-
-					</div>
+					}
 				}
 			}
 		</div>

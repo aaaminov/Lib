@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="light">
 @*data-bs-theme="light"*@
 @*data-bs-theme="dark"*@
 <head>
@@ -64,11 +64,13 @@
 							<div class="d-lg-none py-1"></div>
 							if (userId.HasValue) {
 								<div class="d-lg-none py-1"></div>
-								if (true) {
-									<li class="nav-item">
-										<a class="btn btn-outline-warning" asp-area="" asp-controller="Home" asp-action="Admin">Админ. панель</a>
-									</li>
-								}
+								//if (true) {
+								//	<li class="nav-item">
+								//		<a class="btn btn-outline-warning" asp-area="" asp-controller="Home" asp-action="Admin">Админ. панель</a>
+								//	</li>
+								//	<div class="d-none d-lg-block mx-1"></div>
+								//	<div class="d-lg-none py-1"></div>
+								//}
 								<li class="nav-item">
 									<a class="btn btn-outline-primary" asp-area="" asp-controller="User" asp-action="Profile">Профиль</a>
 								</li>
