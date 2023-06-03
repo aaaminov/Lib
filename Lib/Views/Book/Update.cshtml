@@ -22,10 +22,39 @@
             </div>
             <div class="form_group mt-2 mb-2">
                 <input class="form-control" type="text" name="date_of_creation" placeholder="Дата создания" value="@book.DateOfCreation" required />
+            </div><div class="form_group mt-2 mb-2">
+                <label for="selectGenre">Жанры книги</label>
+                <select id="selectGenre" class="form-select mt-2" name="genre_ids" multiple>
+                    @{
+                        List<Int32> g_ids = ViewBag.genre_ids;
+                        foreach (var genre in ViewBag.genres) {
+                            if (g_ids.Contains(genre.Id)) {
+                                <option value="@genre.Id" selected>@genre.Name</option>
+                            } else {
+                                <option value="@genre.Id">@genre.Name</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form_group mt-2 mb-2">
+                <label for="selectAuthor">Авторы книги</label>
+                <select id="selectAuthor" class="form-select mt-2" name="author_ids" multiple>
+                    @{
+                        List<Int32> author_ids = ViewBag.author_ids;
+                        foreach (var author in ViewBag.authors) {
+                            if (author_ids.Contains(author.Id)) {
+                                <option value="@author.Id" selected>@author.Name</option>
+                            } else {
+                                <option value="@author.Id">@author.Name</option>
+                            }
+                        }
+                    }
+                </select>
             </div>
             <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
         </form>
-        <form asp-controller="Author" asp-action="Delete" asp-route-id="@book.Id" method="post">
+        <form asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" method="post">
             <input class="btn btn-danger mt-2" type="submit" value="Удалить">
         </form>
 
@@ -44,8 +73,30 @@
                 <input class="form-control" type="text" name="photo" placeholder="Ссылка на фото" required />
             </div>
             <div class="form_group mt-2 mb-2">
-                <input class="form-control" type="text" date_of_creation" placeholder="Дата создания" required />
+                <input class="form-control" type="text" name="date_of_creation" placeholder="Дата создания" required />
             </div>
+            <div class="form_group mt-2 mb-2">
+                <label for="selectGenre">Жанры книги</label>
+                <select id="selectGenre" class="form-select mt-2" name="genre_ids" multiple>
+                    @{
+                        foreach (var genre in ViewBag.genres) {
+                                <option value="@genre.Id">@genre.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form_group mt-2 mb-2">
+                <label for="selectAuthor">Авторы книги</label>
+                <select id="selectAuthor" class="form-select mt-2" name="author_ids" multiple>
+                    @{
+                        foreach (var author in ViewBag.authors) {
+                                <option value="@author.Id">@author.Name</option>
+                            
+                        }
+                    }
+                </select>
+            </div>
+           
             <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
         </form>
     }

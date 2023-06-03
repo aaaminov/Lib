@@ -87,7 +87,11 @@ namespace Lib.Controllers {
 			}
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null && UserController.isCurrentUserAdmin(user)) {
-				return View("~/Views/Book/Update.cshtml");
+
+				ViewBag.genres = LibDbContext.Instance.Genres.ToList();
+				ViewBag.authors = LibDbContext.Instance.Authors.ToList();
+
+                return View("~/Views/Book/Update.cshtml");
 			}
 			return RedirectToAction("Login", "Auth");
 		}
@@ -142,25 +146,67 @@ namespace Lib.Controllers {
 			}
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null && UserController.isCurrentUserAdmin(user)) {
-				Book book = LibDbContext.Instance.Books.FirstOrDefault(b => b.Id == id);
+				Book book = LibDbContext.Instance.Books
+					.Include(n => n.GenreBooks)
+					.Include(n => n.AuthorBooks)
+					.FirstOrDefault(b => b.Id == id);
 				Console.WriteLine("book get edit = " + id.ToString());
 				ViewBag.book = book;
-				return View("~/Views/Book/Update.cshtml");
+
+                ViewBag.genre_ids = book.GenreBooks.Select(n => n.GenreId).ToList();
+                ViewBag.author_ids = book.AuthorBooks.Select(n => n.AuthorId).ToList();
+
+                ViewBag.genres = LibDbContext.Instance.Genres.ToList();
+                ViewBag.authors = LibDbContext.Instance.Authors.ToList();
+
+                return View("~/Views/Book/Update.cshtml");
 			}
 			return RedirectToAction("Login", "Auth");
 		}
 
 		// POST:
 		[HttpPost("update")]
-		public async Task<ActionResult> Update(int id, string name, string description, string photo, string date_of_creation) {
-
+		public async Task<ActionResult> Update(int id, string name, string description, string photo, 
+					string date_of_creation, string[] genre_ids, string[] author_ids) {
+			Console.WriteLine(genre_ids.Length + " lol " + string.Join(", ", genre_ids));
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null && UserController.isCurrentUserAdmin(user)) {
 				var last = LibDbContext.Instance.Books.OrderBy(n => n.Id).LastOrDefault();
 				Book book = null;
 				if (id >= 1) {
 					book = LibDbContext.Instance.Books
+						.Include(n => n.GenreBooks)
+							.ThenInclude(n => n.Genre)
+						.Include(n => n.AuthorBooks)
+							.ThenInclude(n => n.Author)
 						.FirstOrDefault(b => b.Id == id);
+
+					foreach (GenreBook gb in book.GenreBooks) {
+                        LibDbContext.Instance.GenreBooks.Remove(gb);
+                    }
+					foreach (var genreIdStr in genre_ids) {
+						if (int.TryParse(genreIdStr, out int genreId)) {
+							GenreBook gb = new GenreBook() {
+								BookId = book.Id,
+								GenreId = genreId
+							};
+                            LibDbContext.Instance.GenreBooks.Add(gb);
+                        }
+					}
+					
+					foreach (AuthorBook ab in book.AuthorBooks) {
+                        LibDbContext.Instance.AuthorBooks.Remove(ab);
+                    }
+					foreach (var authorIdStr in author_ids) {
+						if (int.TryParse(authorIdStr, out int authorId)) {
+							AuthorBook ab = new AuthorBook() {
+								BookId = book.Id,
+								AuthorId = authorId
+							};
+                            LibDbContext.Instance.AuthorBooks.Add(ab);
+                        }
+					}
+
 					book.Name = name;
 					book.Description = description;
 					book.Photo = photo;
@@ -175,8 +221,25 @@ namespace Lib.Controllers {
 						Photo = photo,
 						DateOfCreation = date_of_creation
 					};
-
-					LibDbContext.Instance.Books.Add(book);
+                    LibDbContext.Instance.Books.Add(book);
+                    foreach (var genreIdStr in genre_ids) {
+                        if (int.TryParse(genreIdStr, out int genreId)) {
+                            GenreBook gb = new GenreBook() {
+                                BookId = book.Id,
+                                GenreId = genreId
+                            };
+                            LibDbContext.Instance.GenreBooks.Add(gb);
+                        }
+                    }
+                    foreach (var authorIdStr in author_ids) {
+                        if (int.TryParse(authorIdStr, out int authorId)) {
+                            AuthorBook ab = new AuthorBook() {
+                                BookId = book.Id,
+                                AuthorId = authorId
+                            };
+                            LibDbContext.Instance.AuthorBooks.Add(ab);
+                        }
+                    }
 					//await LibDbContext.Instance.SaveChangesAsync();
 					//return RedirectToAction("All", "Author");
 				}

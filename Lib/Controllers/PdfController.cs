@@ -26,8 +26,8 @@ namespace Lib.Controllers {
 					htmlContent = UserStatistics();
 					break;
 				}
-				case "PopularBooksByMounth": {
-					htmlContent = PopularBooksByMounth();
+				case "TopRatedBooks": {
+					htmlContent = TopRatedBooks();
 					break;
 				}
 				case "PopularBooks": {
@@ -68,7 +68,9 @@ namespace Lib.Controllers {
 				}}
 				</style>
 				<body  style=""margin: 1rem;"">
+					<hr>
 					{htmlContent}
+					<hr>
 				</body>
 				</html>
           ";
@@ -88,7 +90,7 @@ namespace Lib.Controllers {
 			headerSettings.FontSize = 12;
 			headerSettings.FontName = "sans-serif";
 			headerSettings.Center = "Lib - сайт с рецензиями на книги";
-			headerSettings.Line = true;
+			//headerSettings.Line = true;
 			headerSettings.Spacing = 4;
 
 			FooterSettings footerSettings = new FooterSettings();
@@ -106,7 +108,7 @@ namespace Lib.Controllers {
 			};
 			var pdfFile = _converter.Convert(htmlToPdfDocument); ;
 			return File(pdfFile,
-			"application/octet-stream", "Statistics.pdf");
+			"application/octet-stream", $"{type}.pdf");
 		}
 
 		public string UserStatistics() {
@@ -126,6 +128,7 @@ namespace Lib.Controllers {
 			return $@"<div>
 				<div style=""margin: 1rem auto;"">
 					<div class=""header bold"">Статистика пользователя</div>
+					<br />
 					<div class="""">
 						<span>{userName}</span>
 						<span class=""text-warning"">{userStrAdmin}</span>
@@ -182,11 +185,12 @@ namespace Lib.Controllers {
 			</div>";
 		}
 
-		private string PopularBooksByMounth() {
-			var booksAll = LibDbContext.Instance.Books
+		private string TopRatedBooks() {
+			var books = LibDbContext.Instance.Books
 				//.Include(b => b.AuthorBooks)
 				//	.ThenInclude(ab => ab.Author)
-				.Include(b => b.FeaturedBooks)
+				//.Include(b => b.FeaturedBooks)
+				.OrderByDescending(b => b.AvgRating)
 				.Take(10).ToList();
 
 			User user = UserController.getCurrentUser(HttpContext);
@@ -196,44 +200,30 @@ namespace Lib.Controllers {
 			}
 
 			var now = DateTime.Now;
-			var mounthBefore = now.AddMonths(-1);
-
-			List<Book> books = new List<Book>();
-			foreach (var book in booksAll) {
-				foreach (var fb in book.FeaturedBooks) {
-					int res = DateTime.Compare(fb.DateOfAdd, mounthBefore);
-					if (res >= 0) {
-						if (!books.Contains(book)) {
-							books.Add(book);
-						}
-					}
-				}
-			}
-			books = books.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
 
 			var content = $@"<div>
 				<div style=""margin: 1rem auto;"">
-					<div class=""header bold"">Список популярных книг за месяц</div>
-					<div class="""">{mounthBefore.ToString("M")} - {now.ToString("M")}</div>
+					<div class=""header bold"">Книги с самыми высокими оценками</div>
 				</div>
 
 				<table class=""table mb-2"">
 					<thead>
 						<tr>
 							<th scope=""col"">Название книги</th>
-							<th scope=""col"">Кол-во в избранных</th>
-							<th scope=""col"">Рецензий</th>
+							<th scope=""col"">Кол-во рецензий</th>
+							<th scope=""col"">Средняя оценка</th>
 						</tr>
 					</thead>
 					<tbody>";
 
 			foreach (var book in books) {
 				if (book != null) {
+					var avgRating = book.AvgRating.HasValue ? book.AvgRating.Value : 0;
 					content += $@"
 						<tr>
 							<th scope=""row"">{book.Name}</th>
-							<td>{book.FeaturedBooks.Count}</td>
 							<td>{book.Reviews.Count}</td>
+							<td>{avgRating}</td>
 						</tr>
 					";
 				}
@@ -267,26 +257,27 @@ namespace Lib.Controllers {
 
 			var content = $@"<div>
 				<div style=""margin: 1rem auto;"">
-					<div class=""header bold"">Список популярных книг</div>
+					<div class=""header bold"">Популярные книги</div>
 				</div>
 
 				<table class=""table mb-2"">
 					<thead>
 						<tr>
 							<th scope=""col"">Название книги</th>
-							<th scope=""col"">Кол-во в избранных</th>
-							<th scope=""col"">Рецензий</th>
+							<th scope=""col"">Кол-во рецензий</th>
+							<th scope=""col"">Средняя оценка</th>
 						</tr>
 					</thead>
 					<tbody>";
 
 			foreach (var book in books) {
 				if (book != null) {
+					var avgRating = book.AvgRating.HasValue ? book.AvgRating.Value : 0;
 					content += $@"
 						<tr>
 							<th scope=""row"">{book.Name}</th>
-							<td>{book.FeaturedBooks.Count}</td>
 							<td>{book.Reviews.Count}</td>
+							<td>{avgRating}</td>
 						</tr>
 					";
 				}
