@@ -44,11 +44,23 @@
 						<li class="nav-item">
 							<a class="nav-link  " asp-area="" asp-controller="Home" asp-action="New">Новинки</a> @*text-dark*@
 						</li>
+						<li class="nav-item">
+							<a class="nav-link  " asp-area="" asp-controller="Home" asp-action="Top">Топ-10</a>
+						</li>
+						@*<div class="d-none d-lg-block vr mx-1 align-self-center" style="height: 2rem;"></div>*@
+						@*<div class="d-lg-none py-1"></div>*@
+						@*<div class="d-lg-none"><hr class="my-1" /></div>*@
+						<li class="nav-item">
+							<a class="nav-link  " asp-area="" asp-controller="Author" asp-action="All">Авторы</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link  " asp-area="" asp-controller="Genre" asp-action="All">Жанры</a>
+						</li>
 						@{
 							int? userId = Context.Session.GetInt32("userId");
 							if (userId.HasValue) {
-								<div class="d-none d-lg-block vr mx-1 align-self-center" style="height: 2rem;"></div>
-								<div class="d-lg-none py-1"></div>
+								//<div class="d-none d-lg-block vr mx-1 align-self-center" style="height: 2rem;"></div>
+								//<div class="d-lg-none py-1"></div>
 								//<div class="d-lg-none"><hr class="my-1" /></div>
 								<li class="nav-item">
 									<a class="nav-link" asp-area="" asp-controller="Note" asp-action="All">Заметки</a>
@@ -61,9 +73,10 @@
 					</ul>
 					<ul class="navbar-nav">
 						@{
-							<div class="d-lg-none py-1"></div>
+							//<div class="d-lg-none py-1"></div>
+							<div class="d-lg-none"><hr class="my-1" /></div>
 							if (userId.HasValue) {
-								<div class="d-lg-none py-1"></div>
+								//<div class="d-lg-none py-1"></div>
 								//if (true) {
 								//	<li class="nav-item">
 								//		<a class="btn btn-outline-warning" asp-area="" asp-controller="Home" asp-action="Admin">Админ. панель</a>
@@ -72,13 +85,31 @@
 								//	<div class="d-lg-none py-1"></div>
 								//}
 								<li class="nav-item">
-									<a class="btn btn-outline-primary" asp-area="" asp-controller="User" asp-action="Profile">Профиль</a>
+									<a class="nav-link" asp-area="" asp-controller="User" asp-action="Profile">
+										@{
+											string? userName = Context.Session.GetString("userName");
+											string? userIsAdmin = Context.Session.GetString("userIsAdmin");
+											if (userName.Length > 0) {
+												<div>
+													@userName
+													@{
+														if (userIsAdmin == "true") {
+															<span class="text-warning"> [admin]</span>
+														}
+													}
+												</div>
+											} else {
+												<span>Профиль</span>
+											}
+										}
+									</a>
 								</li>
-								<div class="d-lg-none py-1"></div>
+								//<div class="d-lg-none py-1"></div>
 							} else {
 								<li class="nav-item">
 									<a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Войти</a>
 								</li>
+								<div class="d-lg-none py-1"></div>
 								<li class="nav-item">
 									<a class="btn btn-success" asp-area="" asp-controller="Auth" asp-action="Register">Регистрация</a>
 								</li>

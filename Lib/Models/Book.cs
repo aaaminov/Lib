@@ -25,7 +25,7 @@ namespace Lib.Models
         public virtual ICollection<GenreBook> GenreBooks { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
 
-        public string StrAvgRating {
+        public string StrAvgRatingQ {
 			get {
                 if (AvgRating.HasValue) {
                     return AvgRating.Value.ToString("f");
@@ -43,17 +43,26 @@ namespace Lib.Models
             }
         }
 
-        //public List<Author> GetAuthors {
-        //    get {
-        //        return AuthorBooks.Select(ab => ab.Author).ToList();
-        //    }
-        //}
+   //     public ICollection<FeaturedBook> FeaturedBooksForPopular {
+   //         get {
+   //             if (FeaturedBooks != null) {
+			//		return FeaturedBooks.Where(fb => fb.MarkId == 2 || fb.MarkId == 2).ToList();
+			//	}
+			//	return null;
+			//}
+   //     }
 
-        //public string StrAuthors {
-        //    get {
-        //        return string.Join(",", GetAuthors);
+		//public List<Author> GetAuthors {
+		//    get {
+		//        return AuthorBooks.Select(ab => ab.Author).ToList();
+		//    }
+		//}
 
-        //    }
-        //}
-    }
+		//public string StrAuthors {
+		//    get {
+		//        return string.Join(",", GetAuthors);
+
+		//    }
+		//}
+	}
 }

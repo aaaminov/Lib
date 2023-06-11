@@ -1,26 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Авторизация";
+	ViewData["Title"] = "Авторизация";
 }
-<h1>@ViewData["Title"]</h1>
-@{
-	if (@ViewBag.message != null) {
-		<div class="alert alert-danger" role="alert">
-			@ViewBag.message
-		</div>
+<div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 mt-3 mx-auto">
+	<h2>@ViewData["Title"]</h2>
+	@{
+		if (@ViewBag.message != null) {
+			<div class="alert alert-danger" role="alert">
+				@ViewBag.message
+			</div>
+		}
 	}
-}
+	<div class="">
+		<form asp-controller="Auth" asp-action="Login" method="post">
+			<div class="form_group mt-2 mb-2">
+				@*<label for="login">Логин:</label>*@
+				<input class="form-control" id="login" name="login" type="email" required placeholder="Логин" />
+			</div>
 
-<form asp-controller="Auth" asp-action="Login" method="post">
-	<div class="form_group mt-2 mb-2">
-		@*<label for="login">Логин:</label>*@
-		<input class="form-control" id="login" name="login" type="email" required placeholder="Логин" />
+			<div class="form_group mt-2 mb-2">
+				@*<label for="password">Пароль:</label>*@
+				<input class="form-control" id="password" name="password" type="password" required placeholder="Пароль" />
+			</div>
+
+			<input class="btn btn-success mt-2 mb-2" type="submit" value="Войти" />
+
+		</form>
 	</div>
+</div>
 
-	<div class="form_group mt-2 mb-2">
-		@*<label for="password">Пароль:</label>*@
-		<input class="form-control" id="password" name="password" type="password" required placeholder="Пароль" />
-	</div>
-
-	<input class="btn btn-success mt-2 mb-2" type="submit" value="Войти" />
-
-</form>

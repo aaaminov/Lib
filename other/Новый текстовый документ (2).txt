@@ -4,3 +4,8 @@ https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Pushkin_Alexander_by_S
 поменять вывод message
 admin панель доделать
 
+
+на кнопки "редактировать" добавить картиночку
+выровнять шрифты на 
+подумать над "рецензии -> отзывы" 
+

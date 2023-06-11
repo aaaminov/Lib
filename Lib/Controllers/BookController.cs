@@ -35,6 +35,8 @@ namespace Lib.Controllers {
 					.ThenInclude(ab => ab.Genre)
 				.Include(b => b.FeaturedBooks)
 					.ThenInclude(ab => ab.Mark)
+				.Include(b => b.FeaturedBooks)
+					.ThenInclude(ab => ab.User)
 				.Include(b => b.Reviews)
 					.ThenInclude(ab => ab.User)
 				.Include(b => b.Reviews)

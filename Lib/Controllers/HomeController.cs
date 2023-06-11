@@ -72,7 +72,7 @@ namespace Lib.Controllers {
 				//	.ThenInclude(ab => ab.Author)
                 .Include(b => b.FeaturedBooks)
 				.OrderByDescending(b => b.FeaturedBooks.Count)
-				.Take(20).ToList();
+				.Take(10).ToList();
             ViewBag.title = "Популярное";
             ViewBag.ActivePopular = "active";
             ViewBag.ShowPopular = true;
@@ -90,7 +90,7 @@ namespace Lib.Controllers {
         public IActionResult New() {
 			ViewBag.books = LibDbContext.Instance.Books
 				.OrderByDescending(b => b.Id)
-				.Take(20).ToList();
+				.Take(10).ToList();
 			ViewBag.title = "Новинки";
 			ViewBag.ActiveNew = "active";
             ViewBag.ShowPopular = false;
@@ -102,6 +102,24 @@ namespace Lib.Controllers {
 			}
 
 			return View("~/Views/Book/All.cshtml");
+		}
+        
+        [HttpGet("top")]
+        public IActionResult Top() {
+			int takeCount = 10;
+			ViewBag.books = LibDbContext.Instance.Books
+				.Where(b => b.AvgRating.HasValue)
+				.OrderByDescending(b => b.AvgRating)
+				.Take(takeCount).ToList();
+			ViewBag.title = $"Топ-{takeCount}";
+
+			User user = UserController.getCurrentUser(HttpContext);
+			if (user != null) {
+				ViewBag.user = user;
+				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
+			}
+
+			return View("~/Views/Book/Top.cshtml");
 		}
         
 

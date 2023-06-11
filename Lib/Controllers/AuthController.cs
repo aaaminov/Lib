@@ -20,6 +20,10 @@ namespace Lib.Controllers {
 			User user = LibDbContext.Instance.Users.FirstOrDefault(u => u.Login == login && u.Password == password);
 			if (user != null) {
 				HttpContext.Session.SetInt32("userId", user.Id);
+				HttpContext.Session.SetString("userName", user.Name);
+				if (UserController.isCurrentUserAdmin(user)) {
+					HttpContext.Session.SetString("userIsAdmin", "true");
+				}
 				Console.WriteLine(HttpContext.Session.GetInt32("userId"));
 				return RedirectToAction("Index", "Home", new { welcome = true });
 			}
@@ -33,6 +37,8 @@ namespace Lib.Controllers {
 			int? userId = HttpContext.Session.GetInt32("userId");
 			if (userId.HasValue) {
 				HttpContext.Session.Remove("userId");
+				HttpContext.Session.Remove("userName");
+				HttpContext.Session.Remove("userIsAdmin");
 			}
 			return RedirectToAction("Login", new { message = "Произведен выход из аккаунта" });
 		}
@@ -71,6 +77,10 @@ namespace Lib.Controllers {
 			await LibDbContext.Instance.SaveChangesAsync();
 
 			HttpContext.Session.SetInt32("userId", user.Id);
+			HttpContext.Session.SetString("userName", user.Name);
+			if (UserController.isCurrentUserAdmin(user)) {
+				HttpContext.Session.SetString("userIsAdmin", "true");
+			}
 			Console.WriteLine(HttpContext.Session.GetInt32("userId"));
 			return RedirectToAction("Index", "Home");
 		}
