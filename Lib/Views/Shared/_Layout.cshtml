@@ -1,7 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-@*data-bs-theme="light"*@
-@*data-bs-theme="dark"*@
+@{
+	var theme = "light";
+	//theme = "dark";
+}
+<html lang="en" data-bs-theme="@theme">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,17 +12,36 @@
 	@*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/Lib.styles.css" asp-append-version="true" />
+	<style>
+		.lib-logo {
+			height: 40px;
+		}
+
+		@{
+			var filter = "";
+			if (@theme == "dark") { 
+				filter = "invert(80%)";
+			}
+		}
+		.svg {
+			filter: @filter;
+		}
+	</style>
 </head>
 <body>
 	<header>
 		<nav class="navbar navbar-expand-lg navbar-light border-bottom box-shadow mb-3" @*bg-white*@>
 			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Lib</a>
+				@*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Lib</a>*@
+				<a class="" asp-area="" asp-controller="Home" asp-action="Index">
+					<img class="align-middle lib-logo svg" src="~/img/svg/lib-logo.svg" />
+				</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 
+				<div class="d-none d-lg-block mx-1"></div>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<div class="d-lg-none py-1"></div>
 					<form class="form-inline my-2 my-lg-0" asp-controller="Home" asp-action="Search" method="get">
@@ -36,8 +57,9 @@
 							</div>
 						</div>*@
 					</form>
+					<div class="d-none d-lg-block mx-1"></div>
+
 					<ul class="navbar-nav flex-grow-1">
-						<div class="d-none d-lg-block mx-1"></div>
 						<li class="nav-item">
 							<a class="nav-link  " asp-area="" asp-controller="Home" asp-action="Popular">Популярное</a> @*text-dark*@
 						</li>
@@ -137,4 +159,5 @@
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
