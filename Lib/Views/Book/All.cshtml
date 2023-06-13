@@ -15,34 +15,39 @@
 </nav>
 
 <div class="row">
-	<div class="col-xs-12 col-sm-3 col-md-2">
-		<div class="border rounded p-3 ">
-			<label class="mb-2">Жанры</label>
-			@{
-				List<Genre> genres = LibDbContext.Instance.Genres.OrderBy(g => g.Name).ToList();
-				foreach (var genre in genres) {
-					<h5>
-						<a style="text-decoration: none;" asp-controller="Genre" asp-action="One" asp-route-id="@genre.Id">@genre.Name</a>
-					</h5>
-				}
-			}
-		</div>
-	</div>
-
-	<div class="col-xs-12 col-sm-9 col-md-10">
+	@{
+		string classForBooks = "";
+		if (ViewBag.isTop == null && ViewBag.isTop != true) {
+			<div class="col-xs-12 col-sm-3 col-md-2">
+				<div class="border rounded p-3 ">
+					<label class="mb-2">Жанры</label>
+					@{
+						List<Genre> genres = LibDbContext.Instance.Genres.OrderBy(g => g.Name).ToList();
+						foreach (var genre in genres) {
+							<h5>
+								<a style="text-decoration: none;" asp-controller="Genre" asp-action="One" asp-route-id="@genre.Id">@genre.Name</a>
+							</h5>
+						}
+					}
+				</div>
+			</div>
+			classForBooks = "col-xs-12 col-sm-9 col-md-10";
+		}
+	}
+	<div class="@classForBooks">
 		<div class="">
 			<h2>@ViewBag.title</h2>
 		</div>
-
 		@{
-			User user = @ViewBag.user;
-			if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
-				<h5>
-					<a class="btn btn-primary mt-2 mb-2" asp-area="" asp-controller="Book" asp-action="Create">Добавить книгу</a>
-				</h5>
+			if (ViewBag.isTop == null && ViewBag.isTop != true) {
+				User user = @ViewBag.user;
+				if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
+					<h5>
+						<a class="btn btn-primary mt-2 mb-2" asp-area="" asp-controller="Book" asp-action="Create">Добавить книгу</a>
+					</h5>
+				}
 			}
 		}
-
 		<div class="">
 			<ul class="list-unstyled row mt-3">
 				@{

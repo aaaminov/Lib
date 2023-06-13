@@ -29,13 +29,13 @@ namespace Lib.Controllers {
 			return user.RoleId == 2 ? true : false;
 		}
 
-		// GET:
-		[HttpGet("")]
-		[HttpGet("all")]
-		public ActionResult All() {
-			ViewBag.users = LibDbContext.Instance.Users.ToList();
-			return View();
-		}
+		//// GET:
+		//[HttpGet("")]
+		//[HttpGet("all")]
+		//public ActionResult All() {
+		//	ViewBag.users = LibDbContext.Instance.Users.ToList();
+		//	return View();
+		//}
 
 		//// GET: мб убрать
 		//[HttpGet("create")]
@@ -160,21 +160,21 @@ namespace Lib.Controllers {
 			return RedirectToAction("Login", "Auth");
 		}
 
-		// GET:
-		[HttpGet("~/featured")]
-		public IActionResult Featured() {
-			User user = getCurrentUser(HttpContext);
-			if (user != null) {
-				List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
-					.Include(fb => fb.Mark)
-					.Include(fb => fb.Book)
-					.Where(fb => fb.UserId == user.Id).ToList();
-				ViewBag.user = user;
-				ViewBag.featuredBooks = featuredBooks;
-				return View();
-			}
-			return RedirectToAction("Login", "Auth");
-		}
+		//// GET:
+		//[HttpGet("~/featured")]
+		//public IActionResult Featured() {
+		//	User user = getCurrentUser(HttpContext);
+		//	if (user != null) {
+		//		List<FeaturedBook> featuredBooks = LibDbContext.Instance.FeaturedBooks
+		//			.Include(fb => fb.Mark)
+		//			.Include(fb => fb.Book)
+		//			.Where(fb => fb.UserId == user.Id).ToList();
+		//		ViewBag.user = user;
+		//		ViewBag.featuredBooks = featuredBooks;
+		//		return View();
+		//	}
+		//	return RedirectToAction("Login", "Auth");
+		//}
 
 
 		//// GET: AuthorController/Delete/5

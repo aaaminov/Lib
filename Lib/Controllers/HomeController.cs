@@ -112,6 +112,7 @@ namespace Lib.Controllers {
 				.OrderByDescending(b => b.AvgRating)
 				.Take(takeCount).ToList();
 			ViewBag.title = $"Топ-{takeCount}";
+			ViewBag.isTop = true;
 
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null) {
@@ -119,7 +120,7 @@ namespace Lib.Controllers {
 				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
 			}
 
-			return View("~/Views/Book/Top.cshtml");
+			return View("~/Views/Book/All.cshtml");
 		}
         
 
