@@ -26,7 +26,7 @@ namespace Lib.Controllers {
 
 		// GET:
 		[HttpGet("{id:int}")]
-		public IActionResult One(int id) {
+		public IActionResult One(int id, string? message = null) {
 			Console.WriteLine("book get one = " + id.ToString());
 			Book book = LibDbContext.Instance.Books
 				.Include(b => b.AuthorBooks)
@@ -65,6 +65,7 @@ namespace Lib.Controllers {
 			//	ViewBag.user = user;
 			//}
 
+			ViewBag.message = message;
 			ViewBag.book = book;
 			ViewBag.authors = book.AuthorBooks.Select(ab => ab.Author).ToList();
 			ViewBag.genres = book.GenreBooks.Select(ab => ab.Genre).ToList();

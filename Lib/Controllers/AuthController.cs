@@ -82,7 +82,7 @@ namespace Lib.Controllers {
 				HttpContext.Session.SetString("userIsAdmin", "true");
 			}
 			Console.WriteLine(HttpContext.Session.GetInt32("userId"));
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction("Index", "Home", new { welcome = true });
 		}
 
 		//[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

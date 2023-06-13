@@ -79,17 +79,19 @@ namespace Lib.Controllers {
 					await LibDbContext.Instance.SaveChangesAsync();
 				}
 			}
-			return RedirectToAction("One", new { id });
+			//return RedirectToAction("One", new { id });
+			return Redirect($"{Url.Action("One", "Note", new { id = id, message = "Сохранено" })}");
 		}
 
 		// GET:
 		[HttpGet("{id:int}")]
-		public IActionResult One(int id) {
+		public IActionResult One(int id, string? message = null) {
 			int? userId = HttpContext.Session.GetInt32("userId");
 			if (userId.HasValue) {
 				Note note = getNoteByIdFromCurrentUser(id, userId.Value);
 				if (note != null) {
 					ViewBag.note = note;
+					ViewBag.message = message;
 					return View();
 				}
 			}

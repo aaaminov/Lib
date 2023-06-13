@@ -4,6 +4,14 @@
 }
 
 <div class="row mb-5">
+	@{
+		if (@ViewBag.message != null) {
+			<div class="alert alert-danger" role="alert">
+				@ViewBag.message
+			</div>
+		}
+	}
+
 	<div class="col-xs-12 col-sm-4 col-md-3">
 		<img class="rounded" style="width: 100%" alt="@book.Name" src="@book.PhotoPath" />
 	</div>
@@ -61,7 +69,7 @@
 				</h5>
 			</button>
 			<div class="collapse mt-1" id="collapseRating">
-				<div class="card card-body col-xs-12 col-sm-8 col-md-6">
+				<div class="card card-body col-xs-12 col-sm-12 col-md-12 col-lg-6">
 					@{
 						List<Review> reviews = ViewBag.reviews;
 						List<int> ratings = reviews.Select(r => r.Rating).ToList();
@@ -83,7 +91,7 @@
 								</div>
 								<div class="col-2">
 									<div class="m-auto">
-										<span class="d-inline">@percent%</span>
+										<span class="d-inline text-nowrap">@percent%</span>
 									</div>
 								</div>
 								<div class="col-5">
@@ -495,7 +503,7 @@
 										<form class="form-inline mx-2 d-inline" asp-controller="Review" asp-action="DeleteByAdmin" method="post">
 											<input type="hidden" name="book_id" value="@book.Id" />
 											<input type="hidden" name="user_id" value="@review.UserId" />
-											<input class="btn btn-danger" type="submit" value="Удалить" />
+											<input class="btn btn-danger" type="submit" value="Снять с публикации" />
 										</form>
 									}
 								}

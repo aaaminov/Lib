@@ -10,6 +10,9 @@ namespace Lib.Controllers {
 		[HttpPost("update")]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Update(int book_id, int rating, string content) {
+			if (string.IsNullOrEmpty(content)) {
+				return Redirect($"{Url.Action("One", "Book", new { id = book_id, message = "Текст рецензии не может быть пустым" })}");
+			}
 			int? userId = HttpContext.Session.GetInt32("userId");
 			if (userId.HasValue) {
 				Review review = LibDbContext.Instance.Reviews
