@@ -1,7 +1,6 @@
 ﻿@using Microsoft.EntityFrameworkCore;
 @{
 	List<Book> books = new List<Book>();
-
 	int i = 0;
 	int? savedBookId = Context.Session.GetInt32($"savedBook_{i}_id");
 	while (savedBookId.HasValue) {
@@ -17,7 +16,6 @@
 		i++;
 		savedBookId = Context.Session.GetInt32($"savedBook_{i}_id");
 	}
-
 	List<Author> authors = new List<Author>();
 	int j = 0;
 	int? savedAuthorId = Context.Session.GetInt32($"savedAuthor_{j}_id");
@@ -35,12 +33,10 @@
 		savedAuthorId = Context.Session.GetInt32($"savedAuthor_{j}_id");
 	}
 }
-
 <div class="">
 	@{
 		bool isBooksExist = books.Count != 0 ? true : false;
 		bool isAuthorsExist = authors.Count != 0 ? true : false;
-
 		if (isAuthorsExist || isBooksExist) {
 			<h2>Недавно смотрели</h2>
 			<nav class="mt-3">
@@ -66,7 +62,6 @@
 					}
 				</div>
 			</nav>
-
 			<div class="tab-content mt-3 mb-5" id="nav-tabContent">
 				@{
 					if (isBooksExist) {

@@ -1,16 +1,7 @@
 ﻿@model Review
 @{
 	Review review = Model;
-	//var authors = LibDbContext.Instance.AuthorBooks.Where(ab => ab.BookId == book.Id).Select(ab => ab.Author).ToList();
-	//List<Author> authors = null;
-	//try {
-	//	authors = book.AuthorBooks.Select(ab => ab.Author).ToList();
-	//} catch {
-	//	authors = LibDbContext.Instance.AuthorBooks.Where(ab => ab.BookId == book.Id).Select(ab => ab.Author).ToList();
-	//}
-
 	if (review != null) {
-
 		<div class="border rounded mb-3 p-2" style="width: 512px;">
 			<h5>
 				<a asp-controller="User" asp-action="One" asp-route-id="@review.User.Id" class="" style="text-decoration: none;">
@@ -36,7 +27,6 @@
 			<div class="text-secondary pb-1">
 				Лайков - @review.Likes.Count
 			</div>
-
 		</div>
 	}
 }
