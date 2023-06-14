@@ -91,7 +91,6 @@ namespace Lib.Controllers {
 				LibDbContext.Instance.Likes.Add(like);
 				await LibDbContext.Instance.SaveChangesAsync();
 				return Redirect($"{Url.Action("One", "Book", new { id = book_id })}#{review_id}");
-				//return RedirectToAction("One", "Book", new { id = book_id });
 			}
 			return RedirectToAction("Login", "Auth");
 		}
@@ -108,11 +107,9 @@ namespace Lib.Controllers {
 					LibDbContext.Instance.Likes.Remove(like);
 					await LibDbContext.Instance.SaveChangesAsync();
 					return Redirect($"{Url.Action("One", "Book", new { id = book_id })}#{review_id}");
-					//return RedirectToAction("One", "Book", new { id = book_id });
 				}
 			}
 			return RedirectToAction("Login", "Auth");
 		}
-
 	}
 }

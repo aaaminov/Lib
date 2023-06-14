@@ -1,5 +1,4 @@
 ﻿using Lib.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,25 +45,6 @@ namespace Lib.Controllers {
 			if (book == null) {
 				return RedirectToAction("All", "Book");
 			}
-
-			//List<Author> authors = new List<Author>();
-			//List<AuthorBook> authorBooks = LibDbContext.Instance.AuthorBooks
-			//    .Include(ab => ab.Author)
-			//    .Where(ab => ab.BookId == id).ToList();
-			//foreach (AuthorBook authorBook in authorBooks) {
-			//    //authors.Add(LibDbContext.Instance.Authors.FirstOrDefault(a => a.Id == authorBook.AuthorId));
-			//    authors.Add(authorBook.Author);
-			//}
-
-			//int? userId = HttpContext.Session.GetInt32("userId");
-			//if (userId.HasValue) {
-			//	User user = LibDbContext.Instance.Users
-			//		.Include(u => u.Role)
-			//		.Include(u => u.Likes)
-			//		.FirstOrDefault(u => u.Id == userId);
-			//	ViewBag.user = user;
-			//}
-
 			ViewBag.message = message;
 			ViewBag.book = book;
 			ViewBag.authors = book.AuthorBooks.Select(ab => ab.Author).ToList();
@@ -72,13 +52,11 @@ namespace Lib.Controllers {
 			ViewBag.reviews = book.Reviews.OrderByDescending(b => b.DateOfCreation).ToList();
 			ViewBag.marks = LibDbContext.Instance.Marks.ToList();
 			SaveBookToSession(book);
-
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null) {
 				ViewBag.user = user;
 				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
 			}
-
 			return View();
 		}
 
@@ -90,7 +68,6 @@ namespace Lib.Controllers {
 			}
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null && UserController.isCurrentUserAdmin(user)) {
-
 				ViewBag.genres = LibDbContext.Instance.Genres.ToList();
 				ViewBag.authors = LibDbContext.Instance.Authors.ToList();
 
@@ -155,13 +132,10 @@ namespace Lib.Controllers {
 					.FirstOrDefault(b => b.Id == id);
 				Console.WriteLine("book get edit = " + id.ToString());
 				ViewBag.book = book;
-
                 ViewBag.genre_ids = book.GenreBooks.Select(n => n.GenreId).ToList();
                 ViewBag.author_ids = book.AuthorBooks.Select(n => n.AuthorId).ToList();
-
                 ViewBag.genres = LibDbContext.Instance.Genres.ToList();
                 ViewBag.authors = LibDbContext.Instance.Authors.ToList();
-
                 return View("~/Views/Book/Update.cshtml");
 			}
 			return RedirectToAction("Login", "Auth");
@@ -183,7 +157,6 @@ namespace Lib.Controllers {
 						.Include(n => n.AuthorBooks)
 							.ThenInclude(n => n.Author)
 						.FirstOrDefault(b => b.Id == id);
-
 					foreach (GenreBook gb in book.GenreBooks) {
                         LibDbContext.Instance.GenreBooks.Remove(gb);
                     }
@@ -196,7 +169,6 @@ namespace Lib.Controllers {
                             LibDbContext.Instance.GenreBooks.Add(gb);
                         }
 					}
-					
 					foreach (AuthorBook ab in book.AuthorBooks) {
                         LibDbContext.Instance.AuthorBooks.Remove(ab);
                     }
@@ -209,12 +181,10 @@ namespace Lib.Controllers {
                             LibDbContext.Instance.AuthorBooks.Add(ab);
                         }
 					}
-
 					book.Name = name;
 					book.Description = description;
 					book.Photo = photo;
 					book.DateOfCreation = date_of_creation;
-
 					LibDbContext.Instance.Books.Update(book);
 				} else {
 					book = new Book() {
@@ -243,8 +213,6 @@ namespace Lib.Controllers {
                             LibDbContext.Instance.AuthorBooks.Add(ab);
                         }
                     }
-					//await LibDbContext.Instance.SaveChangesAsync();
-					//return RedirectToAction("All", "Author");
 				}
 				await LibDbContext.Instance.SaveChangesAsync();
 				return RedirectToAction("One", new { id });
@@ -252,63 +220,9 @@ namespace Lib.Controllers {
 			return RedirectToAction("Login", "Auth");
 		}
 
-
-		//// GET: BookController/Create
-		//[HttpGet("create")]
-		//public IActionResult Create() {
-		//    ViewBag.books = LibDbContext.Instance.Books.ToList();
-		//    return View();
-		//}
-
-		//// POST: BookController/Create
-		//[HttpPost("create")]
-		//[ValidateAntiForgeryToken]
-		//public ActionResult Create(IFormCollection collection) {
-		//    try {
-		//        return RedirectToAction("ToBookPage", "{id:int}", new { id = 1 });
-		//    } catch {
-		//        return View();
-		//    }
-		//}
-
-		//[HttpGet("{id:int}/edit")]
-		//public IActionResult Edit(int id) {
-		//    ViewBag.book = LibDbContext.Instance.Books.Find(id);
-		//    return View();
-		//}
-
-		//// POST: BookController/Edit/5
-		//[HttpPost("{id:int}/edit")]
-		//[ValidateAntiForgeryToken]
-		//public ActionResult Edit(int id, IFormCollection collection) {
-		//    ViewBag.book = LibDbContext.Instance.Books.Find(id);
-		//    try {
-		//        return RedirectToAction("ToBookPage", "{id:int}", new { id });
-		//    } catch {
-		//        return View();
-		//    }
-		//}
-
-		//// GET: BookController/Delete/5
-		//public ActionResult Delete(int id) {
-		//    return View();
-		//}
-
-		//// POST: BookController/Delete/5
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]
-		//public ActionResult Delete(int id, IFormCollection collection) {
-		//    try {
-		//        return RedirectToAction(nameof(Index));
-		//    } catch {
-		//        return View();
-		//    }
-		//}
-
 		private void SaveBookToSession(Book book) {
 			List<int> savedIds = new List<int>();
 			for (int i = 0; i < COUNT_OF_SAVED_BOOKS; i++) {
-
 				int? savedBookId = HttpContext.Session.GetInt32($"savedBook_{i}_id");
 				if (!savedBookId.HasValue) {
 					break;
@@ -326,6 +240,5 @@ namespace Lib.Controllers {
 				HttpContext.Session.SetInt32($"savedBook_{i}_id", savedIds[i]);
 			}
 		}
-
 	}
 }

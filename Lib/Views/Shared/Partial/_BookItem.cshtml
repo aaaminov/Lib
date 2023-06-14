@@ -1,7 +1,6 @@
 ﻿@model Book
 @{
 	Book book = Model;
-	//var authors = LibDbContext.Instance.AuthorBooks.Where(ab => ab.BookId == book.Id).Select(ab => ab.Author).ToList();
 	if (book != null) {
 		List<Author> authors = null;
 		try {
@@ -9,19 +8,14 @@
 		} catch {
 			authors = LibDbContext.Instance.AuthorBooks.Where(ab => ab.BookId == book.Id).Select(ab => ab.Author).ToList();
 		}
-
-
 		<div class="border rounded mb-3" style="width: 256px;">
-
 			<a asp-controller="Book" asp-action="One" asp-route-id="@book.Id" class="" style="">
 				<img class="rounded-top" style="width: 100%; height: 360px; object-fit: contain;" alt="@book.Name" src="@book.PhotoPath" />
 			</a>
-
 			<div class="p-3">
 				<a asp-controller="Book" asp-action="One" asp-route-id="@book.Id" style="text-decoration: none;">
 					<h5 class="text-truncate">@book.Name</h5>
 				</a>
-
 				<div class="text-truncate">
 					@{
 						for (int i = 0; i < authors.Count; i++) {
@@ -34,26 +28,21 @@
 						}
 					}
 				</div>
-
 				@{
-					if (true) { // ViewData["show_avg_rating"] != null && (bool)ViewData["show_avg_rating"] == true
-						<h5 class="py-1">
-							<img class="align-baseline text-warning svg" src="~/img/svg/star-fill.svg" />
-							<div class="align-baseline d-inline">
-								@{
-									//@book.StrAvgRating
-									if (book.AvgRating.HasValue) {
-										<span class="d-inline">@book.AvgRating.Value.ToString("f")</span>
-									} else {
-										<span class="d-inline">нет оценок</span>
-									}
+					<h5 class="py-1">
+						<img class="align-baseline text-warning svg" src="~/img/svg/star-fill.svg" />
+						<div class="align-baseline d-inline">
+							@{
+								if (book.AvgRating.HasValue) {
+									<span class="d-inline">@book.AvgRating.Value.ToString("f")</span>
+								} else {
+									<span class="d-inline">нет оценок</span>
 								}
-								</div>
-						</h5>
-					}
+							}
+						</div>
+					</h5>
 				}
 			</div>
 		</div>
-
 	}
 }

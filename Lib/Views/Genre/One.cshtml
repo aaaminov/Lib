@@ -1,7 +1,7 @@
 ﻿@{
 	Genre genre = ViewBag.genre;
 	User user = @ViewBag.user;
-	ViewData["Title"] = @genre.Name /*+ " - Жанр"*/;
+	ViewData["Title"] = @genre.Name;
 }
 <nav aria-label="breadcrumb">
 	<ol class="breadcrumb">
@@ -9,7 +9,6 @@
 		<li class="breadcrumb-item active" aria-current="page">@genre.Name</li>
 	</ol>
 </nav>
-
 <div class="row">
 	<div class="col-xs-12 col-sm-3 col-md-2">
 		<div class="border rounded p-3 ">
@@ -28,18 +27,15 @@
 			}
 		</div>
 	</div>
-
 	<div class="col-xs-12 col-sm-9 col-md-10">
 		<div class="">
 			<h2>@genre.Name</h2>
 		</div>
-
 		@{
 			if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
 				<a class="btn btn-primary mt-2 mb-2" asp-area="" asp-controller="Genre" asp-action="Edit" asp-route-id="@genre.Id">Редактировать</a>
 			}
 		}
-
 		<nav class="mt-3">
 			<div class="nav nav-tabs" id="nav-tab" role="tablist">
 				<button class="nav-link active" id="nav-popular-tab" data-bs-toggle="tab" data-bs-target="#nav-popular"
@@ -52,7 +48,6 @@
 				</button>
 			</div>
 		</nav>
-
 		<div class="tab-content mt-3" id="nav-tabContent">
 			<div class="tab-pane fade show active" id="nav-popular" role="tabpanel" aria-labelledby="nav-popular-tab" tabindex="0">
 				<div class="mt-2">
@@ -72,7 +67,6 @@
 					</ul>
 				</div>
 			</div>
-
 			<div class="tab-pane fade" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab" tabindex="0">
 				<div class="mt-2">
 					<ul class="list-unstyled row">
@@ -92,12 +86,8 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
-
 </div>
-
 <div class="mt-3">
 	<partial name="Partial/_SavedToSessionItem"></partial>
 </div>
-

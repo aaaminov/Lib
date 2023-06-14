@@ -11,13 +11,11 @@ namespace Lib.Controllers {
         [HttpGet("all")]
         public IActionResult All() {
             ViewBag.genres = LibDbContext.Instance.Genres.OrderBy(g => g.Name).ToList();
-
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null) {
 				ViewBag.user = user;
 				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
 			}
-
 			return View();
         }
 
@@ -30,28 +28,22 @@ namespace Lib.Controllers {
 			if (genre == null) {
 				return RedirectToAction("All", "Genre");
 			}
-
             ViewBag.genre = genre;
-
 			List<Book> books = new List<Book>();
             List<GenreBook> genreBooks = LibDbContext.Instance.GenreBooks
                 .Include(gb => gb.Book)
                     .ThenInclude(b => b.FeaturedBooks)
                 .Where(gb => gb.GenreId == id).ToList();
             foreach (GenreBook genreBook in genreBooks) {
-                //books.Add(LibDbContext.Instance.Books.FirstOrDefault(b => b.Id == genreBook.BookId));
                 books.Add(genreBook.Book);
             }
-
             ViewBag.popularBooks = books.OrderByDescending(b => b.FeaturedBooks.Count).ToList();
             ViewBag.newBooks = books.OrderByDescending(b => b.Id).ToList();
-
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null) {
 				ViewBag.user = user;
 				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
 			}
-
 			return View();
         }
 
@@ -80,9 +72,6 @@ namespace Lib.Controllers {
                     foreach (var gb in genre.GenreBooks) {
                         LibDbContext.Instance.GenreBooks.Remove(gb);
                     }
-
-                    // мб вслед удалять книги
-
                     LibDbContext.Instance.Genres.Remove(genre);
                     await LibDbContext.Instance.SaveChangesAsync();
                 }
@@ -135,6 +124,5 @@ namespace Lib.Controllers {
             }
             return RedirectToAction("Login", "Auth");
         }
-
     }
 }

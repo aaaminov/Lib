@@ -1,5 +1,4 @@
 ﻿using Lib.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -79,7 +78,6 @@ namespace Lib.Controllers {
 					await LibDbContext.Instance.SaveChangesAsync();
 				}
 			}
-			//return RedirectToAction("One", new { id });
 			return Redirect($"{Url.Action("One", "Note", new { id = id, message = "Сохранено" })}");
 		}
 

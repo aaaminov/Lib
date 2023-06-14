@@ -4,11 +4,9 @@
             @ViewBag.message
         </div>
     }
-
     Book book = ViewBag.book;
     if (book != null) {
         ViewData["Title"] = book.Name + " - Редактирование";
-
         <form asp-controller="Book" asp-action="Update" method="post">
             <input class="form-control" type="text" name="id" value="@book.Id" hidden />
             <div class="form_group mt-2 mb-2">
@@ -57,10 +55,8 @@
         <form asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" method="post">
             <input class="btn btn-danger mt-2" type="submit" value="Удалить">
         </form>
-
     } else {
         ViewData["Title"] = "Добавление книги";
-
         <form asp-controller="Book" asp-action="Update" method="post">
             <input class="form-control" type="text" name="id" value="-1" hidden />
             <div class="form_group mt-2 mb-2">
@@ -91,12 +87,10 @@
                     @{
                         foreach (var author in ViewBag.authors) {
                                 <option value="@author.Id">@author.Name</option>
-                            
                         }
                     }
                 </select>
             </div>
-           
             <input class="btn btn-success mt-2 mb-2" type="submit" value="Сохранить" />
         </form>
     }

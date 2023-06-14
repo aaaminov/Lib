@@ -1,7 +1,5 @@
 ﻿@{
 	ViewData["Title"] = "Редактирование профиля";
-	//ViewData["Title"] = @ViewBag.user.Name + " - Редактирование";
-
 }
 <h1>@ViewData["Title"]</h1>
 @{
@@ -11,39 +9,26 @@
 		</div>
 	}
 }
-
 <form asp-controller="User" asp-action="Update" method="post">
 	<div class="form_group mt-2 mb-2">
 		<label for="userId">ID:</label>
 		<input class="form-control" id="userId" readonly value="@ViewBag.user.Id" />
 	</div>
-
 	<div class="form_group mt-2 mb-2">
-		@*<label for="login">Логин:</label>*@
 		<input class="form-control" id="login" name="login" type="email" required placeholder="Логин" value="@ViewBag.user.Login" />
 	</div>
-
 	<div class="form_group mt-2 mb-2">
-		@*<label for="oldPassword">Пароль:</label>*@
 		<input class="form-control" id="oldPassword" name="oldPassword" type="password" required placeholder="Старый пароль" />
 	</div>
-	
 	<div class="form_group mt-2 mb-2">
-		@*<label for="newPassword1">Пароль:</label>*@
 		<input class="form-control" id="newPassword1" name="newPassword1" type="password" required placeholder="Новый пароль" />
 	</div>
-
 	<div class="form_group mt-2 mb-2">
-		@*<label for="newPassword2">Подтверить пароль:</label>*@
 		<input class="form-control" id="newPassword2" name="newPassword2" type="password" required placeholder="Подтверить новый пароль" />
 	</div>
-
 	<div class="form_group mt-2 mb-2">
-		@*<label for="name">Имя:</label>*@
 		<input class="form-control" id="name" name="name" type="text" required placeholder="Имя" value="@ViewBag.user.Name"/>
 	</div>
-
 	<input class="btn btn-primary mt-2 mb-2" type="submit" value="Сохранить" />
-
 </form>
 

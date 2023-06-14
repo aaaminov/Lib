@@ -1,8 +1,6 @@
 ﻿using Lib.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Lib.Controllers {
 	[Route("featured")]
@@ -35,7 +33,6 @@ namespace Lib.Controllers {
 			}
 			return RedirectToAction("Login", "Auth");
 		}
-
 
 		// POST:
 		[HttpPost("one")]

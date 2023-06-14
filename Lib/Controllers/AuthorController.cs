@@ -1,5 +1,4 @@
 ﻿using Lib.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,25 +14,21 @@ namespace Lib.Controllers {
 		public ActionResult All() {
 			List<Author> authors = LibDbContext.Instance.Authors.OrderBy(a => a.Name).ToList();
             ViewBag.authors = authors;
-
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null) {
 				ViewBag.user = user;
 				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
 			}
-
 			return View();
 		}
 
 		// GET:
 		[HttpGet("{id:int}")]
 		public IActionResult One(int id) {
-			//Console.WriteLine("author get one = " + id.ToString());
 			Author author = LibDbContext.Instance.Authors.FirstOrDefault(a => a.Id == id);
 			if (author == null) {
 				return RedirectToAction("All", "Author");
 			}
-
 			List<Book> books = new List<Book>();
 			List<AuthorBook> authorBooks = LibDbContext.Instance.AuthorBooks.Where(ab => ab.AuthorId == id).ToList();
 			foreach (AuthorBook authorBook in authorBooks) {
@@ -51,13 +46,11 @@ namespace Lib.Controllers {
 				.OrderByDescending(b => b.FeaturedBooks.Count)
 				.Take(4).ToList();
 			SaveAuthorToSession(author);
-
 			User user = UserController.getCurrentUser(HttpContext);
 			if (user != null) {
 				ViewBag.user = user;
 				ViewBag.IsAdmin = UserController.isCurrentUserAdmin(user);
 			}
-
 			return View();
 		}
 
@@ -86,9 +79,6 @@ namespace Lib.Controllers {
 					foreach (var ab in author.AuthorBooks) {
 						LibDbContext.Instance.AuthorBooks.Remove(ab);
 					}
-
-					// мб вслед удалять книги
-
 					LibDbContext.Instance.Authors.Remove(author);
 					await LibDbContext.Instance.SaveChangesAsync();
 				}
@@ -129,7 +119,6 @@ namespace Lib.Controllers {
 					author.Name = name;
 					author.Photo = photo;
 					author.Biography = biography;
-
 					LibDbContext.Instance.Authors.Update(author);
 				} else {
 					author = new Author() {
@@ -138,19 +127,13 @@ namespace Lib.Controllers {
 						Photo = photo,
 						Biography = biography
 					};
-
 					LibDbContext.Instance.Authors.Add(author);
-					//await LibDbContext.Instance.SaveChangesAsync();
-					//return RedirectToAction("All", "Author");
 				}
 				await LibDbContext.Instance.SaveChangesAsync();
 				return RedirectToAction("One", new { id });
 			}
 			return RedirectToAction("Login", "Auth");
 		}
-
-
-
 
 		private void SaveAuthorToSession(Author author) {
 			if (author == null) { return; }
@@ -174,6 +157,5 @@ namespace Lib.Controllers {
 				HttpContext.Session.SetInt32($"savedAuthor_{i}_id", savedIds[i]);
 			}
 		}
-
 	}
 }

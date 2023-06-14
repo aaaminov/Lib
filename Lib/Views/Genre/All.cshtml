@@ -1,31 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Жанры";
 }
-@*<div>
-    @{
-        User user = @ViewBag.user;
-        if (@ViewBag.IsAdmin != null && @ViewBag.IsAdmin == true) {
-            <a class="btn btn-primary mt-2 mb-2" asp-area="" asp-controller="Genre" asp-action="Create">Добавить</a>
-        }
-    }
-</div>
-<div class="">
-    @{
-        foreach (var genre in ViewBag.genres) {
-            <h4>
-                <a class="" asp-controller="Genre" asp-action="One" asp-route-id="@genre.Id" >@genre.Name</a>
-            </h4>
-        }
-    }
-</div>*@
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Genre" asp-action="All">Все жанры</a></li>
         <li class="breadcrumb-item"></li>
     </ol>
 </nav>
-
 <div class="row mb-3">
     <div class="col-xs-12 col-sm-3 col-md-2">
         <div class="border rounded p-3 ">
@@ -49,7 +30,6 @@
         <h2 class="">Выберите жанр</h2>
     </div>
 </div>
-
 <div>
     <partial name="Partial/_SavedToSessionItem"></partial>
 </div>
